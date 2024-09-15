@@ -51,3 +51,10 @@ it('should make sure that the rate limiting is blocking after 5 attempts', funct
         ->assertHasErrors(['rateLimiter']);
 
 });
+
+test('required fields', function ($field) {
+    Livewire::test(Login::class)
+        ->set($field, '')
+        ->call('login')
+        ->assertHasErrors([$field => 'required']);
+})->with(['email', 'password']);

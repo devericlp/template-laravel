@@ -26,6 +26,8 @@ class Login extends Component
 
     public function login(): void
     {
+        $this->validate();
+
         if ($this->ensureIsNotRateLimiting()) {
             return;
         }
@@ -41,7 +43,7 @@ class Login extends Component
         $this->redirect(route('dashboard'));
     }
 
-    private function throttleKey() :string
+    private function throttleKey(): string
     {
         return Str::lower($this->email) . '|' . request()->ip;
     }
