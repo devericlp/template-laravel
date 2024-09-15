@@ -4,7 +4,6 @@ namespace Tests\Feature\Livewire\Auth;
 
 use App\Livewire\Auth\Login;
 use App\Models\User;
-use Faker\Factory;
 use Livewire\Livewire;
 
 it('should render the component', function () {
@@ -33,5 +32,22 @@ it('should to inform the user an error when the credentials are invalid', functi
         ->call('login')
         ->assertHasErrors(['invalidCredentials'])
         ->assertSee(trans('auth.failed'));
+});
+
+it('should make sure that the rate limiting is blocking after 5 attempts', function () {
+    $user = User::factory()->create(['email' => 'johndoe@example.com', 'password' => 'password']);
+
+    for ($i = 0; $i < 5; $i++) {
+        Livewire::test(Login::class)
+            ->set('email', $user->email)
+            ->set('password', 'wrong_password')
+            ->call('login');
+    }
+
+    Livewire::test(Login::class)
+        ->set('email', 'johndoe@example.com')
+        ->set('password', 'password')
+        ->call('login')
+        ->assertHasErrors(['rateLimiter']);
 
 });
