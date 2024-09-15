@@ -3,7 +3,7 @@
 namespace App\Livewire\Auth;
 
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use App\Notifications\WelcomeNotification;
 use Illuminate\View\View;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
@@ -29,12 +29,14 @@ class Register extends Component
         $user = User::query()->create([
             'name' => $this->name,
             'email' => $this->email,
-            'password' => Hash::make($this->password),
+            'password' => $this->password
         ]);
 
         auth()->login($user);
 
-        $this->redirect(route('home'));
+        $user->notify(new WelcomeNotification);
+
+        $this->redirect(route('dashboard'));
     }
 
     public function render(): View

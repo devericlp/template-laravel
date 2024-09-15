@@ -20,4 +20,4 @@ Route::get('/', Welcome::class);
 Route::get('/register', Register::class)->name('auth.register');
 Route::get('/logout', fn() => auth()->logout())->name('auth.logout');
 
-Route::get('/home', function () {})->name('home');
+Route::get('/home', function () {})->name('dashboard');
