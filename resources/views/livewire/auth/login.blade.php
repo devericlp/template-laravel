@@ -19,9 +19,9 @@
     </x-form>
 
     <p class="mt-5 text-center text-sm text-gray-400">
-        <a wire:navigate href="{{ route('auth.password-recovery') }}" class="font-semibold text-indigo-400 hover:text-indigo-300">Forgot password?</a>
+        <a wire:navigate href="{{ route('password.recovery') }}" class="font-semibold text-indigo-400 hover:text-indigo-300">Forgot password?</a>
     </p>
-    <p class="mt-10 text-center text-sm text-gray-400">
+    <p class="mt-10 text-center text-sm text-gray-400">x
         Doesn't have an account?
         <a wire:navigate href="{{ route('auth.register') }}"
            class="font-semibold leading-6 text-indigo-400 hover:text-indigo-300">
