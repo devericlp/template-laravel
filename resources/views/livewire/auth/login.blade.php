@@ -17,6 +17,10 @@
             <x-button label="Login" class="btn-primary w-full" type="submit" spinner="login"/>
         </x-slot:actions>
     </x-form>
+
+    <p class="mt-5 text-center text-sm text-gray-400">
+        <a wire:navigate href="{{ route('auth.password-recovery') }}" class="font-semibold text-indigo-400 hover:text-indigo-300">Forgot password?</a>
+    </p>
     <p class="mt-10 text-center text-sm text-gray-400">
         Doesn't have an account?
         <a wire:navigate href="{{ route('auth.register') }}"
