@@ -27,14 +27,14 @@ class Register extends Component
         $this->validate();
 
         $user = User::query()->create([
-            'name' => $this->name,
-            'email' => $this->email,
-            'password' => $this->password
+            'name'     => $this->name,
+            'email'    => $this->email,
+            'password' => $this->password,
         ]);
 
         auth()->login($user);
 
-        $user->notify(new WelcomeNotification);
+        $user->notify(new WelcomeNotification());
 
         $this->redirect(route('dashboard'));
     }

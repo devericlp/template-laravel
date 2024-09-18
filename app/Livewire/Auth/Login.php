@@ -2,8 +2,7 @@
 
 namespace App\Livewire\Auth;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\{Auth, RateLimiter};
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Livewire\Attributes\Rule;
@@ -37,6 +36,7 @@ class Login extends Component
             RateLimiter::hit($this->throttleKey());
 
             $this->addError('invalidCredentials', __('auth.failed'));
+
             return;
         }
 
@@ -52,10 +52,12 @@ class Login extends Component
     {
         if (RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
             $this->addError('rateLimiter', __('auth.throttle', [
-                'seconds' => RateLimiter::availableIn($this->throttleKey())
+                'seconds' => RateLimiter::availableIn($this->throttleKey()),
             ]));
+
             return true;
         }
+
         return false;
     }
 }

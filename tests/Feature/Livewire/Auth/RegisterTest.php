@@ -5,8 +5,8 @@ use App\Models\User;
 use App\Notifications\WelcomeNotification;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Livewire;
-use function Pest\Laravel\assertDatabaseCount;
-use function Pest\Laravel\assertDatabaseHas;
+
+use function Pest\Laravel\{assertDatabaseCount, assertDatabaseHas};
 
 it('should render the component', function () {
     Livewire::test(Register::class)
@@ -24,7 +24,7 @@ it('should be able to register a new user', function () {
         ->assertRedirect(route('dashboard'));
 
     assertDatabaseHas('users', [
-        'name' => 'John doe',
+        'name'  => 'John doe',
         'email' => 'john@doe.com',
     ]);
 
@@ -52,15 +52,15 @@ it('should send a notification welcoming the new user', function () {
 });
 
 it('should be able to check if the email is valid', function () {
-     Livewire::test(Register::class)
-        ->set('name', 'John doe')
-        ->set('email', 'invalid-email')
-        ->set('password', 'password')
-        ->set('password_confirmation', 'password')
-        ->call('submit')
-        ->assertHasErrors([
-            'email' => 'email',
-        ]);
+    Livewire::test(Register::class)
+       ->set('name', 'John doe')
+       ->set('email', 'invalid-email')
+       ->set('password', 'password')
+       ->set('password_confirmation', 'password')
+       ->call('submit')
+       ->assertHasErrors([
+           'email' => 'email',
+       ]);
 });
 
 it('should be able to check if the email already exists', function () {
@@ -78,11 +78,11 @@ it('should be able to check if the email already exists', function () {
 });
 
 it('should be able to check if the password fields are different', function () {
-     Livewire::test(Register::class)
-        ->set('password', 'password')
-        ->set('password_confirmation', 'another_password')
-        ->call('submit')
-        ->assertHasErrors(['password' => 'confirmed']);
+    Livewire::test(Register::class)
+       ->set('password', 'password')
+       ->set('password_confirmation', 'another_password')
+       ->call('submit')
+       ->assertHasErrors(['password' => 'confirmed']);
 });
 
 test('strength password', function ($password, $rule) {
