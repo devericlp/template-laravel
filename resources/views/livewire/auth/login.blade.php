@@ -1,4 +1,11 @@
 <x-card title="Login">
+
+    @if($message = session()->get('error'))
+    <x-alert icon="o-exclamation-triangle" class="alert-error my-2">
+        {{ $message }}
+    </x-alert>
+    @endif
+
     @error('invalidCredentials')
     <x-alert icon="o-exclamation-triangle" class="alert-warning my-2">
         {{ $message }}

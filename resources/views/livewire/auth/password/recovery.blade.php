@@ -4,10 +4,10 @@
             {{ $message }}
         </x-alert>
     @endif
-    <x-form class="space-y-6" wire:submit="sendEmail" no-separator>
+    <x-form class="space-y-6" wire:submit="recoveryPassword" no-separator>
         <x-input type="email" label="Email" wire:model="email"/>
         <x-slot:actions>
-            <x-button label="Recovery" class="btn-primary w-full" type="submit" spinner="sendEmail"/>
+            <x-button label="Recovery" class="btn-primary w-full" type="submit" spinner="recoveryPassword"/>
         </x-slot:actions>
     </x-form>
     <p class="mt-10 text-center text-sm text-gray-400">
