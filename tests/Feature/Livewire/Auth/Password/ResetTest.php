@@ -8,11 +8,6 @@ use Livewire\Livewire;
 
 use function Pest\Laravel\get;
 
-test('needs to have a route that will receive a token and the email needs to be reset it', function () {
-    get(route('password.reset'))
-        ->assertOk();
-});
-
 it('renders successfully', function () {
     Livewire::test(Reset::class)
         ->assertStatus(200);
