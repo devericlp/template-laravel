@@ -7,7 +7,7 @@ use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\{DB, Hash, Password};
 use Illuminate\Support\Str;
 use Illuminate\View\View;
-use Livewire\Attributes\Rule;
+use Livewire\Attributes\{Computed, Rule};
 use Livewire\Component;
 
 class Reset extends Component
@@ -32,7 +32,7 @@ class Reset extends Component
         $this->email = request('email', $email);
 
         if ($this->tokenIsNotValid()) {
-            session()->flash("error", "Token invalid");
+            session()->flash("status", "Token invalid");
             $this->redirectRoute('login');
         }
     }
@@ -41,7 +41,7 @@ class Reset extends Component
     {
         $this->validate();
 
-        $message = Password::reset(
+        $status = Password::reset(
             $this->only('email', 'password', 'password_confirmation', 'token'),
             function (User $user, $password) {
                 $user->password       = $password;
@@ -52,14 +52,20 @@ class Reset extends Component
             }
         );
 
-        session()->flash("success", __($message));
+        session()->flash('status', __($status));
 
-        $this->redirectRoute('dashboard');
+        if ($status !== Password::PASSWORD_RESET) {
+            return;
+        }
+
+        $this->redirectRoute('login');
     }
 
     public function render(): view
     {
-        return view('livewire.auth.password.reset');
+        return view('livewire.auth.password.reset')
+            ->title('Reset Password')
+            ->layout('components.layouts.guest');
     }
 
     private function tokenIsNotValid(): bool
@@ -73,5 +79,11 @@ class Reset extends Component
         }
 
         return true;
+    }
+
+    #[Computed]
+    public function obfuscatedEmail(): string
+    {
+        return obfuscate_email($this->email);
     }
 }

@@ -26,7 +26,7 @@ test('need to receive a valid token with a combination with the email', function
     Notification::assertSentTo([$user], ResetPassword::class, function ($notification) {
 
         get(route('password.reset') . '?token=' . $notification->token)
-            ->assertOk();
+            ->assertSuccessful();
 
         get(route('password.reset') . '?token=' . 'any-token')
             ->assertRedirect(route('login'));
@@ -52,7 +52,7 @@ test('if is possible to reset the password with the given token', function () {
             ->set('password_confirmation', 'new-password')
             ->call('changePassword')
             ->assertHasNoErrors()
-            ->assertRedirect(route('dashboard'));
+            ->assertRedirect(route('login'));
 
         $user->refresh();
 
@@ -88,3 +88,28 @@ test('validating rules', function ($field, $value, $rule) {
     'password:required'  => ['field' => 'password', 'value' => '', 'rule' => 'required'],
     'password:confirmed' => ['field' => 'password', 'value' => 'any-password', 'rule' => 'confirmed'],
 ]);
+
+test('needs to show an obfuscate email to the user', function () {
+
+    $email = "email@example.com";
+
+    $obfuscateEmail = obfuscate_email($email);
+    expect($obfuscateEmail)->toBe("em***@********com");
+
+    Notification::fake();
+
+    $user = User::factory()->create();
+
+    Livewire::test(Recovery::class)
+        ->set('email', $user->email)
+        ->call('recoveryPassword');
+
+    Notification::assertSentTo([$user], ResetPassword::class, function ($notification) use ($user) {
+
+        Livewire::test(Reset::class, ['token' => $notification->token, 'email' => $user->email])
+            ->assertSet('obfuscatedEmail', obfuscate_email($user->email));
+
+        return true;
+    });
+
+});
