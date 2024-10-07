@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -32,6 +33,21 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    public function permissions(): BelongsToMany
+    {
+        return $this->belongsToMany(Permission::class);
+    }
+
+    public function hasPermissionTo(string $key): bool
+    {
+        return $this->permissions()->where(compact('key'))->exists();
+    }
+
+    public function givePermissionTo(string $key): void
+    {
+        $this->permissions()->firstOrCreate(compact('key'));
+    }
 
     /**
      * Get the attributes that should be cast.
