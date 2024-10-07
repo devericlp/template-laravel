@@ -3,10 +3,12 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Cache;
 
 class User extends Authenticatable
 {
@@ -41,12 +43,17 @@ class User extends Authenticatable
 
     public function hasPermissionTo(string $key): bool
     {
-        return $this->permissions()->where(compact('key'))->exists();
+        /** @var Collection $permissions */
+        $permissions = Cache::get($this->getPermissionCacheKey(), $this->permissions);
+
+        return $permissions->where('key', '=', $key)->isNotEmpty();
     }
 
     public function givePermissionTo(string $key): void
     {
         $this->permissions()->firstOrCreate(compact('key'));
+        Cache::forget($this->getPermissionCacheKey());
+        Cache::rememberForever($this->getPermissionCacheKey(), fn () => $this->permissions);
     }
 
     /**
@@ -60,5 +67,13 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password'          => 'hashed',
         ];
+    }
+
+    /**
+    * @return string
+    */
+    public function getPermissionCacheKey(): string
+    {
+        return "user::{$this->id}::permissions";
     }
 }
