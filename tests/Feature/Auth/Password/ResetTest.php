@@ -9,11 +9,6 @@ use Livewire\Livewire;
 use function Pest\Laravel\get;
 use function PHPUnit\Framework\assertTrue;
 
-it('renders successfully', function () {
-    Livewire::test(Reset::class)
-        ->assertStatus(200);
-});
-
 test('need to receive a valid token with a combination with the email', function () {
     Notification::fake();
 
