@@ -31,7 +31,7 @@ class Index extends Component
                     ->where(DB::raw('lower(name)'), 'like', '%' . strtolower($this->search) . '%')
                     ->orWHere(DB::raw('lower(email)'), 'like', '%' . strtolower($this->search) . '%')
             )
-            ->paginate(5);
+            ->paginate();
     }
 
     #[Computed]
