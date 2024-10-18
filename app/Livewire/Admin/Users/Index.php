@@ -2,21 +2,41 @@
 
 namespace App\Livewire\Admin\Users;
 
+use App\Enums\Can;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Attributes\Computed;
-use Livewire\Component;
+use Livewire\{Component, WithPagination};
 
 /**
  * @property-read LengthAwarePaginator|User[] $users
+ * @property-read  array $headers
  */
 class Index extends Component
 {
+    use WithPagination;
+
     #[Computed]
     public function users(): LengthAwarePaginator
     {
-        return User::paginate();
+        return User::paginate(5);
+    }
+
+    #[Computed]
+    public function headers(): array
+    {
+        return [
+            ['key' => 'id', 'label' => '#'],
+            ['key' => 'name', 'label' => 'Name'],
+            ['key' => 'email', 'label' => 'Email'],
+            ['key' => 'permissions', 'label' => 'Permissions'],
+        ];
+    }
+
+    public function mount(): void
+    {
+        $this->authorize(Can::BE_AN_ADMIN->value);
     }
 
     public function render(): View

@@ -1,7 +1,7 @@
 <?php
 
 use App\Enums\Can;
-use App\Livewire\Admin\Dashboard;
+use App\Livewire\Admin\{Dashboard, Users};
 use App\Livewire\Auth\{Login, Logout, Password, Register};
 use App\Livewire\Welcome;
 use Illuminate\Support\Facades\Route;
@@ -23,7 +23,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('/admin')->middleware('can:' . Can::BE_AN_ADMIN->value)->group(function () {
         Route::get('/dashboard', Dashboard::class)->name('admin.dashboard');
 
-        Route::get('/users', fn () => 'oi')->name('admin.users');
+        Route::get('/users', Users\Index::class)->name('admin.users');
     });
     //endregion
 });

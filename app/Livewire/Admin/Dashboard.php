@@ -7,7 +7,7 @@ use Livewire\Component;
 
 class Dashboard extends Component
 {
-    public function mount()
+    public function mount(): void
     {
         $this->authorize(Can::BE_AN_ADMIN->value);
     }

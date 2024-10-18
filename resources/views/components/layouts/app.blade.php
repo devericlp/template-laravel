@@ -48,11 +48,10 @@
                 <x-menu-separator/>
             @endif
 
-            <x-menu-item title="Hello" icon="o-sparkles" link="/"/>
-
             @can(Can::BE_AN_ADMIN->value)
                 <x-menu-sub title="Admin" icon="o-lock-closed">
                     <x-menu-item title="Dashboard" icon="o-chart-bar-square" :link="route('admin.dashboard')"/>
+                    <x-menu-item title="Users" icon="o-users" :link="route('admin.users')"/>
                 </x-menu-sub>
             @endcan
         </x-menu>

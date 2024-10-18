@@ -21,6 +21,7 @@ test("making sure that the route is protected by the permission BE_AN_ADMIN", fu
 });
 
 it("let's create a livewire component to list all users in the page", function () {
+    actingAs(User::factory()->admin()->create());
 
     $users = User::factory()->count(10)->create();
 
@@ -29,7 +30,7 @@ it("let's create a livewire component to list all users in the page", function (
     $lw->assertSet('users', function ($users) {
         expect($users)
             ->toBeInstanceOf(LengthAwarePaginator::class)
-            ->toHaveCount(10);
+            ->toHaveCount(11);
 
         return true;
     });
@@ -37,4 +38,14 @@ it("let's create a livewire component to list all users in the page", function (
     foreach ($users as $user) {
         $lw->assertSee($user->name);
     }
+});
+
+test('check the table headers', function () {
+    Livewire::test(Index::class)
+    ->assertSet('headers', fn () => [
+        ['key' => 'id', 'label' => '#'],
+        ['key' => 'name', 'label' => 'Name'],
+        ['key' => 'email', 'label' => 'Email'],
+        ['key' => 'permissions', 'label' => 'Permissions'],
+    ]);
 });
