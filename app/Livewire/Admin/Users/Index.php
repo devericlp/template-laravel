@@ -5,7 +5,9 @@ namespace App\Livewire\Admin\Users;
 use App\Enums\Can;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
 use Livewire\{Component, WithPagination};
 
@@ -17,10 +19,19 @@ class Index extends Component
 {
     use WithPagination;
 
+    public ?string $search = null;
+
     #[Computed]
     public function users(): LengthAwarePaginator
     {
-        return User::paginate(5);
+        return User::query()
+            ->when(
+                $this->search,
+                fn (Builder $q) => $q
+                    ->where(DB::raw('lower(name)'), 'like', '%' . strtolower($this->search) . '%')
+                    ->orWHere(DB::raw('lower(email)'), 'like', '%' . strtolower($this->search) . '%')
+            )
+            ->paginate(5);
     }
 
     #[Computed]

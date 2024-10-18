@@ -41,11 +41,43 @@ it("let's create a livewire component to list all users in the page", function (
 });
 
 test('check the table headers', function () {
+    actingAs(User::factory()->admin()->create());
+
     Livewire::test(Index::class)
-    ->assertSet('headers', fn () => [
-        ['key' => 'id', 'label' => '#'],
-        ['key' => 'name', 'label' => 'Name'],
-        ['key' => 'email', 'label' => 'Email'],
-        ['key' => 'permissions', 'label' => 'Permissions'],
-    ]);
+        ->assertSet('headers', [
+            ['key' => 'id', 'label' => '#'],
+            ['key' => 'name', 'label' => 'Name'],
+            ['key' => 'email', 'label' => 'Email'],
+            ['key' => 'permissions', 'label' => 'Permissions'],
+        ]);
+});
+
+it('should be able to filter by name and email', function () {
+    $admin      = User::factory()->admin()->create(['name' => 'John Doe', 'email' => 'john@doe.com']);
+    $searchUser = User::factory()->create(['name' => 'Search Guy', 'email' => 'search-guy@email.com']);
+
+    actingAs($admin);
+
+    Livewire::test(Index::class)
+        ->assertSet('users', function ($users) {
+            expect($users)->toHaveCount(2);
+
+            return true;
+        })
+        ->set('search', 'Search Guy')
+        ->assertSet('users', function ($users) {
+            expect($users)
+                ->toHaveCount(1)
+                ->first()->name->toBe('Search Guy');
+
+            return true;
+        })
+        ->set('search', 'search-guy@email.com')
+        ->assertSet('users', function ($users) {
+            expect($users)
+                ->toHaveCount(1)
+                ->first()->email->toBe('search-guy@email.com');
+
+            return true;
+        });
 });
