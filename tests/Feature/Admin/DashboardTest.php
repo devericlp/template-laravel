@@ -7,6 +7,7 @@ use Livewire\Livewire;
 use function Pest\Laravel\{actingAs, get};
 
 it('renders successfully', function () {
+    actingAs(User::factory()->admin()->create());
     Livewire::test(Dashboard::class)
         ->assertStatus(200);
 });
