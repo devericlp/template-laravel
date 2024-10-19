@@ -1,8 +1,8 @@
 <?php
 
+use App\Enums\Can;
 use App\Livewire\Admin\Users\Index;
-use App\Models\User;
-
+use App\Models\{Permission, User};
 use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Livewire;
 
@@ -77,6 +77,29 @@ it('should be able to filter by name and email', function () {
             expect($users)
                 ->toHaveCount(1)
                 ->first()->email->toBe('search-guy@email.com');
+
+            return true;
+        });
+});
+
+it('should be able to filter by permission key', function () {
+    $admin      = User::factory()->admin()->create(['name' => 'John Doe', 'email' => 'john@doe.com']);
+    $searchUser = User::factory()->create(['name' => 'Search Guy', 'email' => 'search-guy@email.com']);
+    $permission = Permission::where('key', Can::BE_AN_ADMIN->value)->first();
+
+    actingAs($admin);
+
+    Livewire::test(Index::class)
+        ->assertSet('users', function ($users) {
+            expect($users)->toHaveCount(2);
+
+            return true;
+        })
+        ->set('search_permissions', [$permission->id])
+        ->assertSet('users', function ($users) {
+            expect($users)
+                ->toHaveCount(1)
+                ->first()->name->toBe('John Doe');
 
             return true;
         });

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
-use Livewire\{Component, WithPagination};
+use Livewire\{Attributes\Rule, Component, WithPagination};
 
 /**
  * @property-read LengthAwarePaginator|User[] $users
@@ -21,15 +21,26 @@ class Index extends Component
 
     public ?string $search = null;
 
+    #[Rule('exists:permissions,id')]
+    public array $search_permissions = [];
+
     #[Computed]
     public function users(): LengthAwarePaginator
     {
+        $this->validate();
+
         return User::query()
             ->when(
                 $this->search,
                 fn (Builder $q) => $q
                     ->where(DB::raw('lower(name)'), 'like', '%' . strtolower($this->search) . '%')
                     ->orWHere(DB::raw('lower(email)'), 'like', '%' . strtolower($this->search) . '%')
+            )
+            ->when(
+                $this->search_permissions,
+                fn (Builder $q) => $q->whereHas('permissions', function (Builder $query) {
+                    $query->whereIn('id', $this->search_permissions);
+                })
             )
             ->paginate();
     }
