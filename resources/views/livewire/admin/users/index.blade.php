@@ -31,8 +31,16 @@
         @endforeach
         @endscope
 
+        @php
+            /** @var \App\Models\User $user */
+        @endphp
         @scope('actions', $user)
-        <x-button icon="o-trash" wire:click="delete({{ $user->id }})" spinner class="btn-sm"/>
+
+        @unless($user->trashed())
+            <x-button icon="o-trash" wire:click="delete({{ $user->id }})" spinner class="btn-sm btn-ghost"/>
+        @else
+            <x-button icon="o-arrow-path" wire:click="restore({{ $user->id }})" spinner class="btn-sm btn-ghost"/>
+        @endunless
         @endscope
     </x-table>
 </div>
