@@ -18,6 +18,7 @@ class Login extends Component
 
     public function render(): View
     {
+        /** @phpstan-ignore-next-line  */
         if (config('app.debug')) {
             $this->email    = "admin@email.com";
             $this->password = "password";
