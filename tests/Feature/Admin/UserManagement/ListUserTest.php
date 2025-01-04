@@ -49,7 +49,7 @@ test('check the table headers', function () {
             ['key' => 'name', 'label' => 'Name'],
             ['key' => 'email', 'label' => 'Email'],
             ['key' => 'created_at', 'label' => 'Created at'],
-            ['key' => 'permissions', 'label' => 'Permissions'],
+            ['key' => 'permissions', 'label' => 'Permissions', 'sortable' => false],
         ]);
 });
 
@@ -139,8 +139,8 @@ it('should be able to order the list by name', function () {
 
             return true;
         })
-        ->set('sortColumnBy', 'name')
-        ->set('sortDirection', 'asc')
+
+        ->set('sortBy', ['column' => 'name', 'direction' => 'asc'])
         ->assertSet('users', function ($users) {
             expect($users)
                 ->first()->name->toBe('A user')
@@ -148,8 +148,7 @@ it('should be able to order the list by name', function () {
 
             return true;
         })
-        ->set('sortColumnBy', 'name')
-        ->set('sortDirection', 'desc')
+        ->set('sortBy', ['column' => 'name', 'direction' => 'desc'])
         ->assertSet('users', function ($users) {
             expect($users)
                 ->first()->name->toBe('B user')
