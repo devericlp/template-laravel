@@ -118,7 +118,7 @@ it('should be able to list deleted users', function () {
 
             return true;
         })
-        ->set('search_trash', true)
+        ->set('search_trash', 1)
         ->assertSet('users', function ($users) {
             expect($users)
                 ->toHaveCount(2);

@@ -1,27 +1,31 @@
-<div>
+<div x-data="{ showFilters: false, toggleFilters() { this.showFilters = !this.showFilters } }">
     <x-header title="Users" separator/>
 
-    <div class="mb-4 flex items-center space-x-4">
-        <div class="w-1/3">
+    <div x-show="showFilters" class="flex mb-14 items-center space-x-4">
+        <x-choices
+            Label="Search by permissions"
+            wire:model.live="search_permissions"
+            :options="$permissions_to_search"
+            option-label="key"
+            search-function="filterPermissions"
+            searchable
+            multiple
+            no-result-text="Nothing here"
+        />
+        <x-select label="Show deleted users" :options="$this->filterShowDeletedUsers" wire:model.live="search_trash"/>
+    </div>
+
+    <div class="mb-4 flex justify-between">
+        <x-select :options="$this->filterPerPage" wire:model.live="perPage"/>
+        <div class="flex space-x-4">
             <x-input
-                label="Search by email or name"
                 icon="o-magnifying-glass"
-                wire:model.live="search"
+                placeholder="Search.."
+                wire:model.live.debounce="search"
+                clearable
             />
+            <x-button @click="toggleFilters()" label="Filters" icon="o-funnel" class="btn-primary"/>
         </div>
-        <div class="w-1/3">
-            <x-choices
-                Label="Search by permissions"
-                wire:model.live="search_permissions"
-                :options="$permissions_to_search"
-                option-label="key"
-                search-function="filterPermissions"
-                searchable
-                multiple
-                no-result-text="Nothing here"
-            />
-        </div>
-        <x-toggle label="Show deleted users" wire:model.live="search_trash" />
     </div>
 
     <x-table :headers="$this->headers" :rows="$this->users" :sort-by="$sortBy" with-pagination>
@@ -32,7 +36,7 @@
         @endscope
 
         @scope('cell_created_at', $user)
-            {{ $user->created_at->format('d/m/Y') }}
+        {{ $user->created_at->format('d/m/Y') }}
         @endscope
 
         @php

@@ -24,7 +24,7 @@ class Index extends Component
     #[Rule('exists:permissions,id')]
     public array $search_permissions = [];
 
-    public bool $search_trash = false;
+    public int $search_trash = 0;
 
     public Collection $permissions_to_search;
 
@@ -63,9 +63,9 @@ class Index extends Component
             )
             ->when(
                 $this->search_trash,
-                fn (Builder $q) => $q->onlyTrashed() /** @phpstan-ignore-line  */
+                fn (Builder $q) => $q->onlyTrashed()/** @phpstan-ignore-line */
             )
-           ->orderBy($this->sortBy['column'], $this->sortBy['direction'])
+            ->orderBy($this->sortBy['column'], $this->sortBy['direction'])
             ->paginate($this->perPage);
     }
 
@@ -90,5 +90,25 @@ class Index extends Component
             )
             ->orderBy('key')
             ->get();
+    }
+
+    #[Computed]
+    public function filterPerPage(): array
+    {
+        return [
+            ['id' => 5, 'name' => '5'],
+            ['id' => 15, 'name' => '15'],
+            ['id' => 25, 'name' => '25'],
+            ['id' => 50, 'name' => '50'],
+        ];
+    }
+
+    #[Computed]
+    public function filterShowDeletedUsers(): array
+    {
+        return [
+            ['id' => 0, 'name' => 'No'],
+            ['id' => 1, 'name' => 'Yes'],
+        ];
     }
 }
