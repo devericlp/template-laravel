@@ -48,6 +48,7 @@ test('check the table headers', function () {
             ['key' => 'id', 'label' => '#'],
             ['key' => 'name', 'label' => 'Name'],
             ['key' => 'email', 'label' => 'Email'],
+            ['key' => 'created_at', 'label' => 'Created at'],
             ['key' => 'permissions', 'label' => 'Permissions'],
         ]);
 });
@@ -121,6 +122,38 @@ it('should be able to list deleted users', function () {
         ->assertSet('users', function ($users) {
             expect($users)
                 ->toHaveCount(2);
+
+            return true;
+        });
+});
+
+it('should be able to order the list by name', function () {
+    $admin = User::factory()->admin()->create(['name' => 'A user', 'email' => 'a-user@email.com']);
+    User::factory()->create(['name' => 'B user', 'email' => 'b-user@email.com']);
+
+    actingAs($admin);
+
+    Livewire::test(Index::class)
+        ->assertSet('users', function ($users) {
+            expect($users)->toHaveCount(2);
+
+            return true;
+        })
+        ->set('sortColumnBy', 'name')
+        ->set('sortDirection', 'asc')
+        ->assertSet('users', function ($users) {
+            expect($users)
+                ->first()->name->toBe('A user')
+                ->and($users)->last()->name->toBe('B user');
+
+            return true;
+        })
+        ->set('sortColumnBy', 'name')
+        ->set('sortDirection', 'desc')
+        ->assertSet('users', function ($users) {
+            expect($users)
+                ->first()->name->toBe('B user')
+                ->and($users)->last()->name->toBe('A user');
 
             return true;
         });
