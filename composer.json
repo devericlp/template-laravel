@@ -12,6 +12,7 @@
         "robsontenorio/mary": "^1.35"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.14",
         "fakerphp/faker": "^1.23",
         "laradumps/laradumps": "^3.0",
         "larastan/larastan": "^2.0",
