@@ -19,7 +19,10 @@ trait HasPermissions
         $pKey = $key instanceof Can ? $key->value : $key;
 
         /** @var Collection $permissions */
-        $permissions = Cache::get($this->getPermissionCacheKey(), $this->permissions);
+        $permissions = Cache::get(
+            $this->getPermissionCacheKey(),
+            fn () => $this->permissions
+        );
 
         return $permissions->where('key', '=', $pKey)->isNotEmpty();
     }
@@ -31,7 +34,10 @@ trait HasPermissions
         $this->permissions()->firstOrCreate(['key' => $pKey]);
 
         Cache::forget($this->getPermissionCacheKey());
-        Cache::rememberForever($this->getPermissionCacheKey(), fn () => $this->permissions);
+        Cache::rememberForever(
+            $this->getPermissionCacheKey(),
+            fn () => $this->permissions
+        );
     }
 
     /**
