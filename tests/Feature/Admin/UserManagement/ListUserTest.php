@@ -157,3 +157,34 @@ it('should be able to order the list by name', function () {
             return true;
         });
 });
+
+it('should be able to order the list by created at', function () {
+    $admin = User::factory()->admin()->create(['name' => 'A user', 'created_at' => now()->subDay()]);
+    User::factory()->create(['name' => 'B user', 'created_at' => now()]);
+
+    actingAs($admin);
+
+    Livewire::test(Index::class)
+        ->assertSet('users', function ($users) {
+            expect($users)->toHaveCount(2);
+
+            return true;
+        })
+
+        ->set('sortBy', ['column' => 'created_at', 'direction' => 'asc'])
+        ->assertSet('users', function ($users) {
+            expect($users)
+                ->first()->name->toBe('A user')
+                ->and($users)->last()->name->toBe('B user');
+
+            return true;
+        })
+        ->set('sortBy', ['column' => 'created_at', 'direction' => 'desc'])
+        ->assertSet('users', function ($users) {
+            expect($users)
+                ->first()->name->toBe('B user')
+                ->and($users)->last()->name->toBe('A user');
+
+            return true;
+        });
+});
