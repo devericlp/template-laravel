@@ -18,6 +18,11 @@ class Login extends Component
 
     public function render(): View
     {
+        if (config('app.debug')) {
+            $this->email    = "admin@email.com";
+            $this->password = "password";
+        }
+
         return view('livewire.auth.login')
             ->title('Sign in to your account')
             ->layout('components.layouts.guest');
