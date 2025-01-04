@@ -107,7 +107,7 @@ it('should be able to filter by permission key', function () {
 
 it('should be able to list deleted users', function () {
     $admin        = User::factory()->admin()->create(['name' => 'Joe Doe', 'email' => 'joe@doe.com']);
-    $deletedUsers = User::factory()->count(2)->create(['deleted_at' => now()]);
+    $deletedUsers = User::factory()->deleted()->count(2)->create();
 
     actingAs($admin);
 
