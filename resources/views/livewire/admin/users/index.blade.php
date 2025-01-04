@@ -1,7 +1,7 @@
 <div>
     <x-header title="Users" separator/>
 
-    <div class="mb-4 flex space-x-4">
+    <div class="mb-4 flex items-center space-x-4">
         <div class="w-1/3">
             <x-input
                 label="Search by email or name"
@@ -21,6 +21,7 @@
                 no-result-text="Nothing here"
             />
         </div>
+        <x-toggle label="Show deleted users" wire:model.live="search_trash" />
     </div>
 
     <x-table :headers="$this->headers" :rows="$this->users" with-pagination>
