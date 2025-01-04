@@ -1,16 +1,26 @@
 <div>
     <x-header title="Users" separator/>
 
-    <div class="flex flex-column flex-md-row justify-between mb-4">
+    <div class="mb-4 flex space-x-4">
         <div class="w-1/3">
             <x-input
-                placeholder="Search by name and email"
-                class="input-sm"
+                label="Search by email or name"
                 icon="o-magnifying-glass"
-                wire:model.live.debounce="search"
+                wire:model.live="search"
             />
         </div>
-        <div></div>
+        <div class="w-1/3">
+            <x-choices
+                Label="Search by permissions"
+                wire:model.live="search_permissions"
+                :options="$permissions_to_search"
+                option-label="key"
+                search-function="filterPermissions"
+                searchable
+                multiple
+                no-result-text="Nothing here"
+            />
+        </div>
     </div>
 
     <x-table :headers="$this->headers" :rows="$this->users" with-pagination>

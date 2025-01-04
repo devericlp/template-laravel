@@ -3,9 +3,9 @@
 namespace App\Livewire\Admin\Users;
 
 use App\Enums\Can;
-use App\Models\User;
+use App\Models\{Permission, User};
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\{Builder, Collection};
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
@@ -23,6 +23,19 @@ class Index extends Component
 
     #[Rule('exists:permissions,id')]
     public array $search_permissions = [];
+
+    public Collection $permissions_to_search;
+
+    public function mount(): void
+    {
+        $this->authorize(Can::BE_AN_ADMIN->value);
+        $this->filterPermissions();
+    }
+
+    public function render(): View
+    {
+        return view('livewire.admin.users.index');
+    }
 
     #[Computed]
     public function users(): LengthAwarePaginator
@@ -56,13 +69,14 @@ class Index extends Component
         ];
     }
 
-    public function mount(): void
+    public function filterPermissions(?string $value = null): void
     {
-        $this->authorize(Can::BE_AN_ADMIN->value);
-    }
-
-    public function render(): View
-    {
-        return view('livewire.admin.users.index');
+        $this->permissions_to_search = Permission::query()
+            ->when(
+                $value,
+                fn (Builder $q) => $q->where('key', 'like', '%' . $value . '%')
+            )
+            ->orderBy('key')
+            ->get();
     }
 }
