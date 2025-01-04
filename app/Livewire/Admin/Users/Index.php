@@ -38,6 +38,11 @@ class Index extends Component
         $this->filterPermissions();
     }
 
+    public function updatedPerPage($value): void
+    {
+        $this->resetPage();
+    }
+
     public function render(): View
     {
         return view('livewire.admin.users.index');
@@ -49,6 +54,7 @@ class Index extends Component
         $this->validate();
 
         return User::query()
+            ->with('permissions')
             ->when(
                 $this->search,
                 fn (Builder $q) => $q
