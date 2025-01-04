@@ -28,9 +28,7 @@ class Index extends Component
 
     public Collection $permissions_to_search;
 
-    public string $sortColumnBy = 'id';
-
-    public string $sortDirection = 'asc';
+    public array $sortBy = ['column' => 'name', 'direction' => 'asc'];
 
     public function mount(): void
     {
@@ -65,7 +63,7 @@ class Index extends Component
                 $this->search_trash,
                 fn (Builder $q) => $q->onlyTrashed() /** @phpstan-ignore-line  */
             )
-           ->orderBy($this->sortColumnBy, $this->sortDirection)
+           ->orderBy($this->sortBy['column'], $this->sortBy['direction'])
             ->paginate();
     }
 
@@ -77,7 +75,7 @@ class Index extends Component
             ['key' => 'name', 'label' => 'Name'],
             ['key' => 'email', 'label' => 'Email'],
             ['key' => 'created_at', 'label' => 'Created at'],
-            ['key' => 'permissions', 'label' => 'Permissions'],
+            ['key' => 'permissions', 'label' => 'Permissions', 'sortable' => false],
         ];
     }
 

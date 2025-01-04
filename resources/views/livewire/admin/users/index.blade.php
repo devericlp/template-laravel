@@ -24,11 +24,15 @@
         <x-toggle label="Show deleted users" wire:model.live="search_trash" />
     </div>
 
-    <x-table :headers="$this->headers" :rows="$this->users" with-pagination>
+    <x-table :headers="$this->headers" :rows="$this->users" :sort-by="$sortBy" with-pagination>
         @scope('cell_permissions', $user)
         @foreach($user->permissions as $permission)
             <x-badge :value="\Illuminate\Support\Str::ucfirst($permission->key)" class="badge-info"/>
         @endforeach
+        @endscope
+
+        @scope('cell_created_at', $user)
+            {{ $user->created_at->format('d/m/Y') }}
         @endscope
 
         @php
