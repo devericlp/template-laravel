@@ -83,7 +83,7 @@ it('should be able to filter by name and email', function () {
 });
 
 it('should be able to filter by permission key', function () {
-    $admin      = User::factory()->admin()->create(['name' => 'John Doe', 'email' => 'john@doe.com']);
+    $admin      = User::factory()->admin()->create(['name' => 'Joe Doe', 'email' => 'joe@doe.com']);
     $searchUser = User::factory()->create(['name' => 'Search Guy', 'email' => 'search-guy@email.com']);
     $permission = Permission::where('key', Can::BE_AN_ADMIN->value)->first();
 
@@ -99,7 +99,7 @@ it('should be able to filter by permission key', function () {
         ->assertSet('users', function ($users) {
             expect($users)
                 ->toHaveCount(1)
-                ->first()->name->toBe('John Doe');
+                ->first()->name->toBe('Joe Doe');
 
             return true;
         });
