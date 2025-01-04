@@ -188,3 +188,23 @@ it('should be able to order the list by created at', function () {
             return true;
         });
 });
+
+it('should be able to paginate the list', function () {
+    $admin = User::factory()->admin()->create();
+    User::factory()->count(30)->create();
+
+    actingAs($admin);
+
+    Livewire::test(Index::class)
+        ->assertSet('users', function (LengthAwarePaginator $users) {
+            expect($users)->toHaveCount(15);
+
+            return true;
+        })
+        ->set('perPage', 10)
+        ->assertSet('users', function (LengthAwarePaginator $users) {
+            expect($users)->toHaveCount(10);
+
+            return true;
+        });
+});

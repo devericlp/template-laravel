@@ -30,6 +30,8 @@ class Index extends Component
 
     public array $sortBy = ['column' => 'name', 'direction' => 'asc'];
 
+    public int $perPage = 15;
+
     public function mount(): void
     {
         $this->authorize(Can::BE_AN_ADMIN->value);
@@ -64,7 +66,7 @@ class Index extends Component
                 fn (Builder $q) => $q->onlyTrashed() /** @phpstan-ignore-line  */
             )
            ->orderBy($this->sortBy['column'], $this->sortBy['direction'])
-            ->paginate();
+            ->paginate($this->perPage);
     }
 
     #[Computed]
