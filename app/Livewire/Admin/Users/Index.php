@@ -70,7 +70,7 @@ class Index extends Component
             )
             ->when(
                 $this->search_trash,
-                fn (Builder $q) => $q->onlyTrashed()/** @phpstan-ignore-line */
+                fn (Builder $q) => $q->onlyTrashed()
             )
             ->orderBy($this->sortBy['column'], $this->sortBy['direction'])
             ->paginate($this->perPage);
@@ -122,5 +122,10 @@ class Index extends Component
     public function destroy(int $id): void
     {
         $this->dispatch('user::deletion', userId: $id);
+    }
+
+    public function restore(int $id): void
+    {
+        $this->dispatch('user::restoration', userId: $id);
     }
 }

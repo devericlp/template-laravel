@@ -55,7 +55,14 @@
                 :disabled="$user->is(auth()->user())"
             />
         @else
-            <x-button icon="o-arrow-path" wire:click="restore({{ $user->id }})" spinner class="btn-sm btn-ghost"/>
+             <x-button
+                id="btn-delete-user-{{ $user->id }}"
+                wire:key="btn-delete-user-{{ $user->id }}"
+                icon="o-arrow-path"
+                wire:click="restore('{{ $user->id }}')"
+                class="btn-sm btn-ghost"
+                spinner
+            />
         @endunless
         @endscope
     </x-table>
