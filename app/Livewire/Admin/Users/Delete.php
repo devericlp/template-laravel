@@ -31,7 +31,6 @@ class Delete extends Component
 
         if ($this->user->is(auth()->user())) {
             $this->addError('InvalidUserLoggedDeletion', 'The logged-in user cannot be removed');
-            $this->error('The logged-in user cannot be removed');
             $this->reset('confirmedDeletion', 'modal');
 
             return;
