@@ -52,6 +52,7 @@
                 wire:click="destroy('{{ $user->id }}')"
                 class="btn-sm btn-ghost"
                 spinner
+                :disabled="$user->is(auth()->user())"
             />
         @else
             <x-button icon="o-arrow-path" wire:click="restore({{ $user->id }})" spinner class="btn-sm btn-ghost"/>
