@@ -22,7 +22,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-
         foreach (Can::cases() as $can) {
             Gate::define(
                 $can->value,
