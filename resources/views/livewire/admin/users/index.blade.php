@@ -45,10 +45,19 @@
         @scope('actions', $user)
 
         @unless($user->trashed())
-            <x-button icon="o-trash" wire:click="delete({{ $user->id }})" spinner class="btn-sm btn-ghost"/>
+            <x-button
+                id="btn-delete-user-{{ $user->id }}"
+                wire:key="btn-delete-user-{{ $user->id }}"
+                icon="o-trash"
+                wire:click="destroy('{{ $user->id }}')"
+                class="btn-sm btn-ghost"
+                spinner
+            />
         @else
             <x-button icon="o-arrow-path" wire:click="restore({{ $user->id }})" spinner class="btn-sm btn-ghost"/>
         @endunless
         @endscope
     </x-table>
+
+    <livewire:admin.users.delete />
 </div>
