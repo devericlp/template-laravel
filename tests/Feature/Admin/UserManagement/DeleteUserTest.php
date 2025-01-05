@@ -14,7 +14,8 @@ it('should be able to delete an user', function () {
 
     actingAs($admin);
 
-    Livewire::test(Delete::class, ['user' => $deleteUser])
+    Livewire::test(Delete::class)
+        ->set('user', $deleteUser)
         ->set('confirmedDeletion', true)
         ->call('destroy')
         ->assertDispatched("user::deleted");
@@ -30,7 +31,8 @@ it('should have a confirmation before deletion', function () {
 
     actingAs($admin);
 
-    Livewire::test(Delete::class, ['user' => $deleteUser])
+    Livewire::test(Delete::class)
+        ->set('user', $deleteUser)
         ->call('destroy')
         ->assertHasErrors(['confirmedDeletion' => 'accepted'])
         ->assertNotDispatched("user::deleted");
@@ -47,7 +49,8 @@ it('should send a notification to the user telling him that he has no long acces
 
     actingAs($admin);
 
-    Livewire::test(Delete::class, ['user' => $deleteUser])
+    Livewire::test(Delete::class)
+        ->set('user', $deleteUser)
         ->set('confirmedDeletion', true)
         ->call('destroy');
 
