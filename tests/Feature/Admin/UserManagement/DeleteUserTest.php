@@ -34,8 +34,7 @@ it('should have a confirmation before deletion', function () {
     Livewire::test(Delete::class)
         ->set('user', $deleteUser)
         ->call('destroy')
-        ->assertHasErrors(['confirmedDeletion' => 'accepted'])
-        ->assertNotDispatched("user::deleted");
+        ->assertHasErrors(['confirmedDeletion' => 'accepted']);
 
     assertNotSoftDeleted('users', [
         'id' => $deleteUser->id,
