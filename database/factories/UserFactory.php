@@ -57,11 +57,11 @@ class UserFactory extends Factory
         return $this->afterCreating(fn (User $user) => $user->givePermissionTo(Can::BE_AN_ADMIN));
     }
 
-    public function deleted(): static
+    public function deleted($deleted_by = null): static
     {
         return $this->state(fn (array $attributes) => [
             'deleted_at' => now(),
-            'deleted_by' => User::factory()->admin()->create()->id,
+            'deleted_by' => $deleted_by ?? User::factory()->admin()->create()->id,
         ]);
     }
 }
