@@ -56,8 +56,8 @@
             />
         @else
              <x-button
-                id="btn-delete-user-{{ $user->id }}"
-                wire:key="btn-delete-user-{{ $user->id }}"
+                id="btn-restore-user-{{ $user->id }}"
+                wire:key="btn-restore-user-{{ $user->id }}"
                 icon="o-arrow-path"
                 wire:click="restore('{{ $user->id }}')"
                 class="btn-sm btn-ghost"
@@ -68,4 +68,5 @@
     </x-table>
 
     <livewire:admin.users.delete />
+    <livewire:admin.users.restore />
 </div>
