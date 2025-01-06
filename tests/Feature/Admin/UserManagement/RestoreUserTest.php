@@ -10,7 +10,7 @@ use function Pest\Laravel\{actingAs, assertNotSoftDeleted, assertSoftDeleted};
 
 it('should be able to restore a deleted user', function () {
     $admin        = User::factory()->admin()->create(['name' => 'Joe Doe', 'email' => 'joe@doe.com']);
-    $restoredUser = User::factory()->deleted()->create(['deleted_by' => $admin->id]);
+    $restoredUser = User::factory()->deleted()->create();
 
     actingAs($admin);
 
@@ -35,7 +35,7 @@ it('should be able to restore a deleted user', function () {
 
 it('should have a confirmation before restoration', function () {
     $admin        = User::factory()->admin()->create(['name' => 'Joe Doe', 'email' => 'joe@doe.com']);
-    $restoredUser = User::factory()->deleted()->create(['deleted_by' => $admin->id]);
+    $restoredUser = User::factory()->deleted()->create();
 
     actingAs($admin);
 
@@ -53,7 +53,7 @@ it('should have a confirmation before restoration', function () {
 it('should send a notification to the user telling him that he has access to the application again', function () {
     Notification::fake();
     $admin        = User::factory()->admin()->create(['name' => 'Joe Doe', 'email' => 'joe@doe.com']);
-    $restoredUser = User::factory()->deleted()->create(['deleted_by' => $admin->id]);
+    $restoredUser = User::factory()->deleted()->create();
 
     actingAs($admin);
 
