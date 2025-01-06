@@ -44,6 +44,7 @@ class Index extends Component
     }
 
     #[On('user::deleted')]
+    #[On('user::restored')]
     public function render(): View
     {
         return view('livewire.admin.users.index');

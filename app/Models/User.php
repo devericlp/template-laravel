@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Traits\Models\HasPermissions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -25,6 +26,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'deleted_by',
+        'restored_at',
+        'restored_by',
     ];
 
     /**
@@ -48,5 +52,15 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password'          => 'hashed',
         ];
+    }
+
+    public function deletedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'deleted_by', 'id');
+    }
+
+    public function restoredBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'restored_by', 'id');
     }
 }

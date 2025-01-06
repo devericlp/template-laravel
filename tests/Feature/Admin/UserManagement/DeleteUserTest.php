@@ -23,6 +23,12 @@ it('should be able to delete an user', function () {
     assertSoftDeleted('users', [
         'id' => $deleteUser->id,
     ]);
+
+    $deleteUser->refresh();
+
+    expect($deleteUser)
+       ->restored_at->toBeNull()
+       ->restored_by->toBeNull();
 });
 
 it('should have a confirmation before deletion', function () {
