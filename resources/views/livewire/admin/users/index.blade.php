@@ -44,29 +44,41 @@
         @endphp
         @scope('actions', $user)
 
-        @unless($user->trashed())
+        <div class="flex space-x-1">
             <x-button
-                id="btn-delete-user-{{ $user->id }}"
-                wire:key="btn-delete-user-{{ $user->id }}"
-                icon="o-trash"
-                wire:click="destroy('{{ $user->id }}')"
-                class="btn-sm btn-ghost"
-                spinner
-                :disabled="$user->is(auth()->user())"
-            />
-        @else
-             <x-button
-                id="btn-restore-user-{{ $user->id }}"
-                wire:key="btn-restore-user-{{ $user->id }}"
-                icon="o-arrow-path"
-                wire:click="restore('{{ $user->id }}')"
+                id="btn-show-user-{{ $user->id }}"
+                wire:key="btn-show-user-{{ $user->id }}"
+                icon="o-eye"
+                wire:click="showUser('{{ $user->id }}')"
                 class="btn-sm btn-ghost"
                 spinner
             />
-        @endunless
+
+            @unless($user->trashed())
+                <x-button
+                    id="btn-delete-user-{{ $user->id }}"
+                    wire:key="btn-delete-user-{{ $user->id }}"
+                    icon="o-trash"
+                    wire:click="destroy('{{ $user->id }}')"
+                    class="btn-sm btn-ghost"
+                    spinner
+                    :disabled="$user->is(auth()->user())"
+                />
+            @else
+                <x-button
+                    id="btn-restore-user-{{ $user->id }}"
+                    wire:key="btn-restore-user-{{ $user->id }}"
+                    icon="o-arrow-path"
+                    wire:click="restore('{{ $user->id }}')"
+                    class="btn-sm btn-ghost"
+                    spinner
+                />
+            @endunless
+        </div>
         @endscope
     </x-table>
 
-    <livewire:admin.users.delete />
-    <livewire:admin.users.restore />
+    <livewire:admin.users.delete/>
+    <livewire:admin.users.restore/>
+    <livewire:admin.users.show/>
 </div>
