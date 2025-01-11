@@ -1,6 +1,6 @@
 <?php
 
-use App\Livewire\Admin\Users\Show;
+use App\Livewire\Admin\Users\{Index, Show};
 use App\Models\User;
 use Livewire\Livewire;
 
@@ -38,4 +38,34 @@ it('should be able to show a details of a deleted user in a component', function
         ->assertSee($userDeleted->updated_at->format('d/m/Y H:i'))
         ->assertSee($userDeleted->deleted_at->format('d/m/Y H:i'))
         ->assertSee($userDeleted->deletedBy->name);
+});
+
+it('should open the modal with the event is dispatched', function () {
+    $admin = User::factory()->admin()->create();
+    $user  = User::factory()->create();
+
+    actingAs($admin);
+
+    $lwShow = Livewire::test(Show::class)
+        ->set('user', null)
+        ->set('modal', false);
+
+    Livewire::test(Index::class)
+        ->call('showUser', $user->id)
+        ->assertDispatched('user::show', userId: $user->id);
+});
+
+test('making sure that the method loadUser has the attribute On', function () {
+    $reflection = new ReflectionClass(new Show());
+
+    $attributes = $reflection->getMethod('loadUser')->getAttributes();
+
+    /** @var ReflectionAttribute $attribute */
+    $attribute = $attributes[0];
+
+    expect($attribute)->getName()->toBe('Livewire\Attributes\On')
+        ->and($attribute)->getArguments()->toHaveCount(1);
+
+    $argument = $attribute->getArguments()[0];
+    expect($argument)->toBe('user::show');
 });

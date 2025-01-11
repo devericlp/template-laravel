@@ -129,4 +129,9 @@ class Index extends Component
     {
         $this->dispatch('user::restoration', userId: $id);
     }
+
+    public function showUser(int $id): void
+    {
+        $this->dispatch('user::show', userId: $id);
+    }
 }
