@@ -2,7 +2,6 @@
 
 use App\Livewire\Admin\Users\{Impersonate, StopImpersonate};
 use App\Models\User;
-use Exception;
 use Livewire\Livewire;
 
 use function Pest\Laravel\{actingAs, get};
