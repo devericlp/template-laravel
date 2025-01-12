@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Admin\Users;
 
+use _PHPStan_b7fe9900d\Nette\Neon\Exception;
+use App\Enums\Can;
 use App\Models\User;
 use Livewire\Attributes\{On, Rule};
 use Livewire\Component;
@@ -22,6 +24,12 @@ class Impersonate extends Component
 
     public function impersonate(): void
     {
+        $this->authorize(Can::BE_AN_ADMIN->value);
+
+        if (auth()->id() === $this->user->id) {
+            throw new Exception("You cannot impersonate yourself");
+        }
+
         $this->validate();
         session()->put('impersonate', $this->user->id);
         session()->put('impersonator', auth()->user()->id);

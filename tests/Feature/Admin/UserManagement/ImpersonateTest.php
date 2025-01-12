@@ -84,3 +84,36 @@ it('should be able to stop the impersonation', function () {
 
     expect(auth()->id())->toBe($admin->id);
 });
+
+it('should have the correct permission to impersonate someone', function () {
+    $admin            = User::factory()->admin()->create();
+    $nonUser          = User::factory()->create();
+    $userImpersonated = User::factory()->create();
+
+    actingAs($nonUser);
+
+    Livewire::test(Impersonate::class)
+        ->set('user', $userImpersonated)
+        ->set('confirmedImpersonation', true)
+        ->call('impersonate')
+        ->assertForbidden();
+
+    actingAs($admin);
+
+    Livewire::test(Impersonate::class)
+        ->set('user', $userImpersonated)
+        ->set('confirmedImpersonation', false)
+        ->call('impersonate')
+        ->assertHasErrors(['confirmedImpersonation' => 'accepted']);
+});
+
+it('should not possible impersonate myself', function () {
+    $admin = User::factory()->admin()->create();
+
+    actingAs($admin);
+
+    Livewire::test(Impersonate::class)
+        ->set('user', $admin)
+        ->set('confirmedImpersonation', false)
+        ->call('impersonate');
+})->throws(\Exception::class);
