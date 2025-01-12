@@ -46,7 +46,7 @@ it('should open the modal with the event is dispatched', function () {
 
     actingAs($admin);
 
-    $lwShow = Livewire::test(Show::class)
+    Livewire::test(Show::class)
         ->set('user', null)
         ->set('modal', false);
 

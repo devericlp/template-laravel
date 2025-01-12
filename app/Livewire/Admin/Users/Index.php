@@ -134,4 +134,9 @@ class Index extends Component
     {
         $this->dispatch('user::show', userId: $id);
     }
+
+    public function impersonate(int $id): void
+    {
+        $this->dispatch('user::impersonation', userId: $id);
+    }
 }

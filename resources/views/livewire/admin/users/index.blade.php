@@ -48,9 +48,10 @@
             <x-button
                 id="btn-show-user-{{ $user->id }}"
                 wire:key="btn-show-user-{{ $user->id }}"
-                icon="o-eye"
+                icon="o-pencil"
                 wire:click="showUser('{{ $user->id }}')"
                 class="btn-sm btn-ghost"
+                title="{{ __('Show details') }}"
                 spinner
             />
 
@@ -61,6 +62,18 @@
                     icon="o-trash"
                     wire:click="destroy('{{ $user->id }}')"
                     class="btn-sm btn-ghost"
+                    title="{{ __('Delete User') }}"
+                    spinner
+                    :disabled="$user->is(auth()->user())"
+                />
+
+                 <x-button
+                    id="btn-impersonate-user-{{ $user->id }}"
+                    wire:key="btn-impersonate-user-{{ $user->id }}"
+                    icon="o-eye"
+                    wire:click="impersonate('{{ $user->id }}')"
+                    class="btn-sm btn-ghost"
+                    title="{{ __('Impersonate User') }}"
                     spinner
                     :disabled="$user->is(auth()->user())"
                 />
@@ -71,6 +84,7 @@
                     icon="o-arrow-path"
                     wire:click="restore('{{ $user->id }}')"
                     class="btn-sm btn-ghost"
+                    title="{{ __('Restore User') }}"
                     spinner
                 />
             @endunless
@@ -81,4 +95,5 @@
     <livewire:admin.users.delete/>
     <livewire:admin.users.restore/>
     <livewire:admin.users.show/>
+    <livewire:admin.users.impersonate/>
 </div>

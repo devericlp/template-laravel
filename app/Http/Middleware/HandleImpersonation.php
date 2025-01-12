@@ -11,13 +11,12 @@ class HandleImpersonation
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response) $next
      */
     public function handle(Request $request, Closure $next): Response
     {
-
-        if ($id = session('impersonate')) {
-            auth()->onceUsingId($id);
+        if (session()->has('impersonate')) {
+            auth()->onceUsingId(session()->get('impersonate'));
         }
 
         return $next($request);
