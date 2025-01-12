@@ -8,7 +8,10 @@ use function Pest\Laravel\{actingAs, get};
 use function PHPUnit\Framework\{assertFalse, assertSame, assertTrue};
 
 it('should add a key impersonate to the session with the given user', function () {
+    $admin            = User::factory()->admin()->create();
     $userImpersonated = User::factory()->create();
+
+    actingAs($admin);
 
     Livewire::test(Impersonate::class)
         ->set('user', $userImpersonated)
@@ -17,7 +20,10 @@ it('should add a key impersonate to the session with the given user', function (
         ->assertRedirect(route('dashboard'));
 
     assertTrue(session()->has('impersonate'));
+    assertTrue(session()->has('impersonator'));
+
     assertSame(session()->get('impersonate'), $userImpersonated->id);
+    assertSame(session()->get('impersonator'), $admin->id);
 });
 
 it('should make sure that we are logged with the impersonated user', function () {
