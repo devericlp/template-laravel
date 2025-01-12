@@ -51,7 +51,7 @@
                 icon="o-pencil"
                 wire:click="showUser('{{ $user->id }}')"
                 class="btn-sm btn-ghost"
-                title="{{ __('Show details') }}"
+                tooltip="{{ __('Show details') }}"
                 spinner
             />
 
@@ -62,7 +62,7 @@
                     icon="o-trash"
                     wire:click="destroy('{{ $user->id }}')"
                     class="btn-sm btn-ghost"
-                    title="{{ __('Delete User') }}"
+                    tooltip="{{ __('Delete') }}"
                     spinner
                     :disabled="$user->is(auth()->user())"
                 />
@@ -73,7 +73,7 @@
                     icon="o-eye"
                     wire:click="impersonate('{{ $user->id }}')"
                     class="btn-sm btn-ghost"
-                    title="{{ __('Impersonate User') }}"
+                    tooltip="{{ __('Impersonate') }}"
                     spinner
                     :disabled="$user->is(auth()->user())"
                 />
@@ -84,7 +84,7 @@
                     icon="o-arrow-path"
                     wire:click="restore('{{ $user->id }}')"
                     class="btn-sm btn-ghost"
-                    title="{{ __('Restore User') }}"
+                    tooltip="{{ __('Restore') }}"
                     spinner
                 />
             @endunless
