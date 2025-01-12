@@ -2,9 +2,9 @@
 
 namespace App\Livewire\Admin\Users;
 
-use _PHPStan_b7fe9900d\Nette\Neon\Exception;
 use App\Enums\Can;
 use App\Models\User;
+use Exception;
 use Livewire\Attributes\{On, Rule};
 use Livewire\Component;
 

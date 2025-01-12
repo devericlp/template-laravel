@@ -2,6 +2,7 @@
 
 use App\Livewire\Admin\Users\{Impersonate, StopImpersonate};
 use App\Models\User;
+use Exception;
 use Livewire\Livewire;
 
 use function Pest\Laravel\{actingAs, get};
@@ -116,4 +117,4 @@ it('should not possible impersonate myself', function () {
         ->set('user', $admin)
         ->set('confirmedImpersonation', false)
         ->call('impersonate');
-})->throws(\Exception::class);
+})->throws(Exception::class);
