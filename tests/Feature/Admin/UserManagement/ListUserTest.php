@@ -112,8 +112,6 @@ it('should be able to list deleted users', function () {
 
     actingAs($admin);
 
-    ds(User::all());
-
     Livewire::test(Index::class)
         ->assertSet('users', function ($users) {
             expect($users)->toHaveCount(1);
