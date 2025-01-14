@@ -20,7 +20,7 @@ it('should be able to login with any user', function () {
     $user = User::factory()->create();
 
     Livewire::test(DevLogin::class)
-        ->assertSet('selectedUser', $user->id)
+        ->set('selectedUser', $user->id)
         ->call('login')
         ->assertRedirect(route('dashboard'));
 
