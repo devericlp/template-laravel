@@ -16,7 +16,7 @@
 @endif
 
 {{-- NAVBAR mobile only --}}
-<x-nav sticky>
+<x-nav sticky class="md:hidden">
     <x-slot:brand>
         <x-app-brand/>
     </x-slot:brand>
@@ -33,34 +33,42 @@
 {{-- MAIN --}}
 <x-main full-width>
     {{-- SIDEBAR --}}
-    <x-slot:sidebar drawer="main-drawer" collapsible class="bg-base-100 lg:bg-inherit">
+    <x-slot:sidebar drawer="main-drawer" collapsible class="pt-3 bg-sky-800 text-white">
 
-        {{-- BRAND --}}
-        <x-app-brand class="p-5 pt-3 w-40 h-20"/>
+        @if(!app()->environment('production'))
+            <livewire:dev.login/>
+        @endif
 
-        {{-- MENU --}}
-        <x-menu activate-by-route>
+        <!-- Hidden when collapsed -->
+        <div class="hidden-when-collapsed ml-5 font-black text-4xl text-yellow-500">mary</div>
 
-            {{-- User --}}
+        <!-- Display when collapsed -->
+        <div class="display-when-collapsed ml-5 font-black text-4xl text-orange-500">m</div>
+
+        <!-- Custom `active menu item background color` -->
+        <x-menu activate-by-route active-bg-color="bg-base-300/10">
+
+            <!-- User -->
             @if($user = auth()->user())
-                <x-menu-separator/>
-
-                <x-list-item :item="$user" value="name" sub-value="email" no-separator no-hover
-                             class="-mx-2 !-my-2 rounded">
+                <x-list-item :item="$user" sub-value="username" no-separator no-hover
+                             class="!-mx-2 mt-2 mb-5 border-y border-y-sky-900">
                     <x-slot:actions>
-                        <livewire:auth.logout/>
+                        <div class="tooltip tooltip-left" data-tip="logoff">
+                            <livewire:auth.logout/>
+                        </div>
                     </x-slot:actions>
                 </x-list-item>
-
-                <x-menu-separator/>
             @endif
 
-            @can(Can::BE_AN_ADMIN->value)
+            <x-menu-item title="Home" icon="o-home" link="/"/>
+
+            @can(\App\Enums\Can::BE_AN_ADMIN->value)
                 <x-menu-sub title="Admin" icon="o-lock-closed">
                     <x-menu-item title="Dashboard" icon="o-chart-bar-square" :link="route('admin.dashboard')"/>
                     <x-menu-item title="Users" icon="o-users" :link="route('admin.users')"/>
                 </x-menu-sub>
             @endcan
+
         </x-menu>
     </x-slot:sidebar>
 
