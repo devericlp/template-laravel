@@ -3,7 +3,8 @@
 use App\Livewire\Auth\Register;
 use App\Models\User;
 use App\Notifications\WelcomeNotification;
-use Illuminate\Support\Facades\Notification;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\{Event, Notification};
 use Livewire\Livewire;
 
 use function Pest\Laravel\{assertDatabaseCount, assertDatabaseHas};
@@ -53,14 +54,14 @@ it('should send a notification welcoming the new user', function () {
 
 it('should be able to check if the email is valid', function () {
     Livewire::test(Register::class)
-       ->set('name', 'John doe')
-       ->set('email', 'invalid-email')
-       ->set('password', 'password')
-       ->set('password_confirmation', 'password')
-       ->call('submit')
-       ->assertHasErrors([
-           'email' => 'email',
-       ]);
+        ->set('name', 'John doe')
+        ->set('email', 'invalid-email')
+        ->set('password', 'password')
+        ->set('password_confirmation', 'password')
+        ->call('submit')
+        ->assertHasErrors([
+            'email' => 'email',
+        ]);
 });
 
 it('should be able to check if the email already exists', function () {
@@ -79,10 +80,10 @@ it('should be able to check if the email already exists', function () {
 
 it('should be able to check if the password fields are different', function () {
     Livewire::test(Register::class)
-       ->set('password', 'password')
-       ->set('password_confirmation', 'another_password')
-       ->call('submit')
-       ->assertHasErrors(['password' => 'confirmed']);
+        ->set('password', 'password')
+        ->set('password_confirmation', 'another_password')
+        ->call('submit')
+        ->assertHasErrors(['password' => 'confirmed']);
 });
 
 test('strength password', function ($password, $rule) {
@@ -101,3 +102,16 @@ test('required fields', function ($field) {
         ->call('submit')
         ->assertHasErrors([$field => 'required']);
 })->with(['name', 'email', 'password', 'password_confirmation']);
+
+it('should dispatch registered event', function () {
+    Event::fake();
+
+    Livewire::test(Register::class)
+        ->set('name', 'John doe')
+        ->set('email', 'john@doe.com')
+        ->set('password', 'password')
+        ->set('password_confirmation', 'password')
+        ->call('submit');
+
+    Event::assertDispatched(Registered::class);
+});
