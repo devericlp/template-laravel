@@ -5,9 +5,7 @@ use App\Livewire\Auth\{EmailValidation, Register};
 use App\Models\User;
 use App\Notifications\ValidateCodeNotification;
 use Illuminate\Auth\Events\Registered;
-
 use Illuminate\Support\Facades\{Event, Notification};
-
 use Livewire\Livewire;
 
 use function Pest\Laravel\actingAs;
@@ -90,4 +88,19 @@ describe('validation page', function () {
         Notification::assertSentTo([$user], ValidateCodeNotification::class);
     });
 
+    it('should update email_verified_at and delete the code if the code is valid', function () {
+        $user = User::factory()->withValidationCode()->create();
+
+        actingAs($user);
+
+        Livewire::test(EmailValidation::class)
+            ->set('code', $user->validation_code)
+            ->call('handle')
+            ->assertHasNoErrors()
+            ->assertRedirect(route('dashboard'));
+
+        expect($user)
+            ->email_verified_at->not->toBeNull()
+            ->validation_code->toBeNull();
+    });
 });

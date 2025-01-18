@@ -3,6 +3,7 @@
 namespace App\Livewire\Auth;
 
 use App\Events\SendNewCode;
+use App\Models\User;
 use closure;
 use Illuminate\View\View;
 use Livewire\Component;
@@ -20,11 +21,19 @@ class EmailValidation extends Component
     {
         $this->validate([
             'code' => function (string $attribute, mixed $value, Closure $fail) {
-                if ($value !== auth()->user()->validation_code) {
+                if ($value != auth()->user()->validation_code) {
                     $fail('Invalid code');
                 }
             },
         ]);
+
+        /* @var User $user */
+        $user                    = auth()->user();
+        $user->email_verified_at = now();
+        $user->validation_code   = null;
+        $user->save();
+
+        $this->redirect(route('dashboard'));
     }
 
     public function sendNewCode(): void
