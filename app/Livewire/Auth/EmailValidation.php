@@ -4,6 +4,7 @@ namespace App\Livewire\Auth;
 
 use App\Events\SendNewCode;
 use App\Models\User;
+use App\Notifications\WelcomeNotification;
 use closure;
 use Illuminate\View\View;
 use Livewire\Component;
@@ -32,6 +33,8 @@ class EmailValidation extends Component
         $user->email_verified_at = now();
         $user->validation_code   = null;
         $user->save();
+
+        $user->notify(new WelcomeNotification());
 
         $this->redirect(route('dashboard'));
     }

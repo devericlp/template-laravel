@@ -3,7 +3,7 @@
 use App\Listeners\Auth\CreateValidationCode;
 use App\Livewire\Auth\{EmailValidation, Register};
 use App\Models\User;
-use App\Notifications\ValidateCodeNotification;
+use App\Notifications\{ValidateCodeNotification, WelcomeNotification};
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\{Event, Notification};
 use Livewire\Livewire;
@@ -102,5 +102,7 @@ describe('validation page', function () {
         expect($user)
             ->email_verified_at->not->toBeNull()
             ->validation_code->toBeNull();
+
+        Notification::assertSentTo($user, WelcomeNotification::class);
     });
 });

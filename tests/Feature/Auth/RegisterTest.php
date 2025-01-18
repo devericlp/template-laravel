@@ -2,9 +2,8 @@
 
 use App\Livewire\Auth\Register;
 use App\Models\User;
-use App\Notifications\WelcomeNotification;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Support\Facades\{Event, Notification};
+use Illuminate\Support\Facades\{Event};
 use Livewire\Livewire;
 
 use function Pest\Laravel\{assertDatabaseCount, assertDatabaseHas};
@@ -33,22 +32,6 @@ it('should be able to register a new user', function () {
         ->id->toBe(User::first()->id);
 
     assertDatabaseCount('users', 1);
-});
-
-it('should send a notification welcoming the new user', function () {
-    Notification::fake();
-
-    Livewire::test(Register::class)
-        ->set('name', 'John doe')
-        ->set('email', 'john@doe.com')
-        ->set('password', 'password')
-        ->set('password_confirmation', 'password')
-        ->call('submit');
-
-    $user = User::whereEmail('john@doe.com')->first();
-
-    Notification::assertSentTo($user, WelcomeNotification::class);
-
 });
 
 it('should be able to check if the email is valid', function () {
