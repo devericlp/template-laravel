@@ -5,38 +5,40 @@ namespace App\Livewire\Auth;
 use App\Events\SendNewCode;
 use App\Models\User;
 use App\Notifications\WelcomeNotification;
-use closure;
+use App\Rules\CodeValidation;
 use Illuminate\View\View;
+use Livewire\Attributes\{Layout, Rule};
 use Livewire\Component;
 
 class EmailValidation extends Component
 {
+    #[Rule(new CodeValidation())]
     public ?string $code = null;
 
+    #[Layout('components.layouts.guest')]
     public function render(): View
     {
-        return view('livewire.auth.email-validation');
+        return view('livewire.auth.email-validation')->title('Confirm the code sent to your email');
     }
 
     public function handle(): void
     {
-        $this->validate([
-            'code' => function (string $attribute, mixed $value, Closure $fail) {
-                if ($value != auth()->user()->validation_code) {
-                    $fail('Invalid code');
-                }
-            },
-        ]);
+        try {
+            $this->validate();
 
-        /* @var User $user */
-        $user                    = auth()->user();
-        $user->email_verified_at = now();
-        $user->validation_code   = null;
-        $user->save();
+            /* @var User $user */
+            $user = auth()->user();
 
-        $user->notify(new WelcomeNotification());
+            $user->email_verified_at = now();
+            $user->validation_code   = null;
+            $user->save();
 
-        $this->redirect(route('dashboard'));
+            $user->notify(new WelcomeNotification());
+
+            $this->redirect(route('dashboard'));
+        } catch (\Exception $e) {
+            session()->flash('status', $e->getMessage());
+        }
     }
 
     public function sendNewCode(): void

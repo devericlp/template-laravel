@@ -3,7 +3,7 @@
 use App\Enums\Can;
 use App\Http\Middleware\ShouldBeVerified;
 use App\Livewire\Admin\{Dashboard, Users};
-use App\Livewire\Auth\{Login, Logout, Password, Register};
+use App\Livewire\Auth\{EmailValidation, Login, Logout, Password, Register};
 use App\Livewire\Welcome;
 use Illuminate\Support\Facades\Route;
 
@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 Route::redirect('/', '/login');
 Route::get('/login', Login::class)->name('login')->middleware('guest');
 Route::get('/register', Register::class)->name('auth.register')->middleware('guest');
-Route::get('/email-validation', fn () => 'oi')->name('auth.email-validation')->middleware('auth');
+Route::get('/email-validation', EmailValidation::class)->name('auth.email-validation')->middleware('auth');
 Route::get('/logout', Logout::class)->name('auth.logout');
 Route::get('/password/recovery', Password\Recovery::class)->name('password.recovery');
 Route::get('/password/reset', Password\Reset::class)->name('password.reset');
