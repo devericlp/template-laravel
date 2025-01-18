@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 Route::redirect('/', '/login');
 Route::get('/login', Login::class)->name('login')->middleware('guest');
 Route::get('/register', Register::class)->name('auth.register')->middleware('guest');
+Route::get('/email-validation', fn () => 'oi')->name('auth.email-validation')->middleware('guest');
 Route::get('/logout', Logout::class)->name('auth.logout');
 Route::get('/password/recovery', Password\Recovery::class)->name('password.recovery');
 Route::get('/password/reset', Password\Reset::class)->name('password.reset');
