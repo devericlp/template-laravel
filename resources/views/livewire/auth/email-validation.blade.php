@@ -19,7 +19,7 @@
         </a>
     </p>
 
-    <div class="flex justify-center mt-2">
-        <livewire:auth.logout/>
-    </div>
+    <p @click="$dispatch('logout')" class="mt-10 text-center text-sm text-gray-400 cursor-pointer">
+        Logout
+    </p>
 </x-card>

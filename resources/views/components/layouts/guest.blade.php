@@ -23,5 +23,6 @@
     </div>
 </div>
 
+<livewire:auth.logout/>
 </body>
 </html>
