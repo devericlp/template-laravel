@@ -6,6 +6,7 @@ use App\Events\SendNewCode;
 use App\Models\User;
 use App\Notifications\WelcomeNotification;
 use App\Rules\CodeValidation;
+use Carbon\Carbon;
 use Illuminate\View\View;
 use Livewire\Attributes\{Layout, Rule};
 use Livewire\Component;
@@ -15,10 +16,12 @@ class EmailValidation extends Component
     #[Rule(new CodeValidation())]
     public ?string $code = null;
 
+    public ?Carbon $dateResendAllowed = null;
+
     #[Layout('components.layouts.guest')]
     public function render(): View
     {
-        return view('livewire.auth.email-validation')->title('Confirm the code sent to your email');
+        return view('livewire.auth.email-validation')->title('Verify authentication code');
     }
 
     public function handle(): void
@@ -37,12 +40,20 @@ class EmailValidation extends Component
 
             $this->redirect(route('dashboard'));
         } catch (\Exception $e) {
-            session()->flash('status', $e->getMessage());
+            $this->addError('code', $e->getMessage());
         }
     }
 
     public function sendNewCode(): void
     {
+        if ($this->dateResendAllowed && now()->isBefore($this->dateResendAllowed)) {
+            $this->addError('dateResendNotAllowed', 'Wait 3 minutes for another attempt');
+
+            return;
+        }
+
         SendNewCode::dispatch(auth()->user());
+
+        $this->dateResendAllowed = now()->addMinutes(3);
     }
 }

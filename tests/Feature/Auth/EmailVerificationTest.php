@@ -10,6 +10,7 @@ use Livewire\Livewire;
 
 use function Pest\Laravel\{actingAs, get};
 use function PHPUnit\Framework\assertTrue;
+use function Spatie\PestPluginTestTime\testTime;
 
 beforeEach(function () {
     Notification::fake();
@@ -104,6 +105,45 @@ describe('validation page', function () {
             ->validation_code->toBeNull();
 
         Notification::assertSentTo($user, WelcomeNotification::class);
+    });
+
+    it('should to set a timestamp to avoid resend a new code many times', function () {
+        $user = User::factory()->withValidationCode()->create();
+
+        actingAs($user);
+
+        $lw = Livewire::test(EmailValidation::class)
+            ->call('sendNewCode');
+
+        expect($lw->get('dateResendAllowed'))->not->toBeNull();
+    });
+
+    it('should be able to block resend for 3 minutes between the sents', function () {
+        $user = User::factory()->withValidationCode()->create();
+
+        actingAs($user);
+
+        $lw = Livewire::test(EmailValidation::class)
+            ->call('sendNewCode');
+
+        $lw->call('sendNewCode')
+            ->assertHasErrors(['dateResendNotAllowed'])
+            ->assertSee('Wait 3 minutes for another attempt');
+
+    });
+
+    it('should be able to send a new code after wait 3 minutes', function () {
+        $user = User::factory()->withValidationCode()->create();
+
+        actingAs($user);
+
+        $lw = Livewire::test(EmailValidation::class)
+            ->call('sendNewCode');
+
+        testTime()->addMinutes(3);
+
+        $lw->call('sendNewCode')
+            ->assertHasNoErrors();
     });
 });
 
