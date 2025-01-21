@@ -8,7 +8,7 @@ use App\Notifications\WelcomeNotification;
 use App\Rules\CodeValidation;
 use Carbon\Carbon;
 use Illuminate\View\View;
-use Livewire\Attributes\{Layout, Rule};
+use Livewire\Attributes\{Layout, On, Rule};
 use Livewire\Component;
 
 class EmailValidation extends Component
@@ -55,5 +55,11 @@ class EmailValidation extends Component
         SendNewCode::dispatch(auth()->user());
 
         $this->dateResendAllowed = now()->addMinutes(3);
+    }
+
+    #[On('resend-allowed')]
+    public function resendAllowed()
+    {
+        $this->dateResendAllowed = null;
     }
 }
