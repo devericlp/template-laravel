@@ -2,27 +2,31 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "keywords": [
+        "laravel",
+        "framework"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.2",
-        "laravel/framework": "^11.9",
-        "laravel/tinker": "^2.9",
+        "laravel/framework": "12.0",
+        "laravel/tinker": "^2.10.1",
+        "livewire/flux": "^2.1",
+        "livewire/flux-pro": "^2.1",
         "livewire/livewire": "^3.5",
-        "owen-it/laravel-auditing": "^13.6",
-        "robsontenorio/mary": "^1.35"
+        "owen-it/laravel-auditing": "^14.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.14",
         "fakerphp/faker": "^1.23",
-        "laradumps/laradumps": "^3.0",
-        "larastan/larastan": "^2.0",
+        "laradumps/laradumps": "^4.0.3",
+        "larastan/larastan": "^3.0",
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.26",
         "mockery/mockery": "^1.6",
-        "nunomaduro/collision": "^8.0",
-        "pestphp/pest": "^2.35",
-        "pestphp/pest-plugin-laravel": "^2.4",
+        "nunomaduro/collision": "^8.6",
+        "pestphp/pest": "^3.0",
+        "pestphp/pest-plugin-laravel": "^3.0",
         "spatie/pest-plugin-test-time": "^2.2"
     },
     "autoload": {
@@ -37,7 +41,7 @@
             "Tests\\": "tests/"
         },
         "files": [
-            "App\\Support\\Functions.php"
+            "app/Support/Functions.php"
         ]
     },
     "scripts": {
@@ -72,5 +76,11 @@
         }
     },
     "minimum-stability": "stable",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": {
+        "flux-pro": {
+            "type": "composer",
+            "url": "https://composer.fluxui.dev"
+        }
+    }
 }

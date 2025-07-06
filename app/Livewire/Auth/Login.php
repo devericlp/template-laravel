@@ -3,25 +3,20 @@
 namespace App\Livewire\Auth;
 
 use Illuminate\Support\Facades\{Auth, RateLimiter};
+use Flux\Flux;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
-use Livewire\Attributes\Rule;
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 class Login extends Component
 {
-    #[Rule('required')]
+    #[Validate(['required', 'email', 'max:255'])]
     public ?string $email = null;
 
-    #[Rule('required')]
+    #[Validate(['required', 'min:8', 'max:255'])]
     public ?string $password = null;
-
-    public function render(): View
-    {
-        return view('livewire.auth.login')
-            ->title('Sign in to your account')
-            ->layout('components.layouts.guest');
-    }
 
     public function login(): void
     {
@@ -37,6 +32,12 @@ class Login extends Component
 
             $this->addError('invalidCredentials', __('auth.failed'));
 
+            Flux::toast(
+                text: __('auth.failed'),
+                heading: __('messages.warning'),
+                variant: 'warning'
+            );
+
             return;
         }
 
@@ -51,13 +52,29 @@ class Login extends Component
     private function ensureIsNotRateLimiting(): bool
     {
         if (RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
-            $this->addError('rateLimiter', __('auth.throttle', [
-                'seconds' => RateLimiter::availableIn($this->throttleKey()),
-            ]));
 
+            $error_message = __('auth.throttle', [
+                'seconds' => RateLimiter::availableIn($this->throttleKey()),
+            ]);
+
+            $this->addError('rateLimiter', $error_message);
+
+            Flux::toast(
+                text: __('auth.failed'),
+                heading: $error_message,
+                variant: 'warning'
+            );
+§
             return true;
         }
 
         return false;
+    }
+
+    #[Layout('components.layouts.guest')]
+    public function render(): View
+    {
+        return view('livewire.auth.login')
+            ->title('Sign in to your account');
     }
 }

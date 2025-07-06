@@ -1,21 +1,39 @@
-<x-card title="Login">
-    <x-form class="space-y-6" wire:submit="submit" no-separator>
-        <x-input label="Name" wire:model="name"/>
-        <x-input type="email" label="Email" wire:model="email"/>
-        <x-input type="password" label="Password" wire:model="password"/>
-        <x-input type="password" label="Confirm your password" wire:model="password_confirmation"/>
+<div>
 
-        <x-slot:actions>
-            <x-button type="reset" label="Reset"/>
-            <x-button label="Register" class="btn-primary" type="submit" spinner="submit"/>
-        </x-slot:actions>
-    </x-form>
-    <p class="mt-10 text-center text-sm text-gray-400">
-        Already have an account?
-        <a wire:navigate href="{{ route('login') }}"
-           class="font-semibold leading-6 text-indigo-400 hover:text-indigo-300">
-            Login
-        </a>
-    </p>
-</x-card>
+    <flux:heading class="text-center mb-3" size="xl">{{ __('messages.register') }}</flux:heading>
+
+    <div class="flex flex-col gap-6">
+        <form wire:submit="submit" class="space-y-4">
+             <flux:input
+                label="{{ __('messages.name') }}"
+                wire:model="name"
+            />
+
+            <flux:input
+                label="{{ __('messages.email') }}"
+                type="email"
+                placeholder="email@example.com"
+                wire:model="email"
+            />
+
+            <flux:input
+                label="{{ __('messages.password') }}"
+                type="password"
+                wire:model="password"/>
+
+            <flux:input
+                label="{{ __('messages.confirm_password') }}"
+                type="password"
+                wire:model="password_confirmation" />
+
+            <flux:button type="submit" variant="primary" class="w-full">{{ __('messages.register') }}</flux:button>
+        </form>
+    </div>
+
+    <flux:subheading class="text-center mt-4">
+        {{ __('messages.already_have_an_account') }}
+        <flux:link href="{{ route('login') }}">{{ __('messages.login') }}</flux:link>
+    </flux:subheading>
+</div>
+
 
