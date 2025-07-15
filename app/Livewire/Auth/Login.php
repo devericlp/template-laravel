@@ -2,12 +2,11 @@
 
 namespace App\Livewire\Auth;
 
-use Illuminate\Support\Facades\{Auth, RateLimiter};
 use Flux\Flux;
+use Illuminate\Support\Facades\{Auth, RateLimiter};
 use Illuminate\Support\Str;
 use Illuminate\View\View;
-use Livewire\Attributes\Layout;
-use Livewire\Attributes\Validate;
+use Livewire\Attributes\{Layout, Validate};
 use Livewire\Component;
 
 class Login extends Component
@@ -15,8 +14,10 @@ class Login extends Component
     #[Validate(['required', 'email', 'max:255'])]
     public ?string $email = null;
 
-    #[Validate(['required', 'min:8', 'max:255'])]
+    #[Validate(['required', 'max:255'])]
     public ?string $password = null;
+
+    public bool $remember = false;
 
     public function login(): void
     {
@@ -26,7 +27,7 @@ class Login extends Component
             return;
         }
 
-        if (!Auth::attempt(['email' => $this->email, 'password' => $this->password])) {
+        if (! Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
 
             RateLimiter::hit($this->throttleKey());
 
@@ -64,7 +65,7 @@ class Login extends Component
                 heading: $error_message,
                 variant: 'warning'
             );
-§
+
             return true;
         }
 

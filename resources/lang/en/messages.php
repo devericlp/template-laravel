@@ -12,7 +12,7 @@ return [
     'name' => 'Name',
     'password' => 'Password',
     'register' => 'Register',
-    'remember_me_for_30_days' => 'Remember me for 30 days',
+    'remember_me' => 'Remember me',
     'signup_for_free' => 'Sign up for free',
     'warning' => 'Warning',
 ];

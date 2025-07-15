@@ -13,15 +13,10 @@
 
 <body class="h-full">
 
-@if (!app()->environment('production'))
-    <x-devbar/>
-@endif
 <div class="flex min-h-screen">
     <div class="flex-1 flex justify-center items-center">
-        <div class="w-80 max-w-80 space-y-6">
-            <div class="flex justify-between opacity-50">
-                <span></span>
-                <flux:brand href="/" logo="resources/img/logo.png" name="{{ config('app.name') }}"/>
+        <div class="w-80 max-w-80">
+            <div class="flex justify-end opacity-50">
                 <flux:button x-data x-on:click="$flux.dark = ! $flux.dark" icon="moon" variant="subtle"
                              aria-label="Toggle dark mode"/>
             </div>
@@ -30,8 +25,10 @@
         </div>
     </div>
 
-    <div class="flex-1 p-4 max-lg:hidden">
-
+    <div class="flex-1 p-4 max-lg:hidden bg-[url('/resources/img/bg01.jpg')] bg-cover">
+        <div class="h-full flex flex-col justify-center">
+            <flux:heading class="text-center mb-3" size="xl">{{ __('messages.welcome') }}</flux:heading>
+        </div>
     </div>
 </div>
 

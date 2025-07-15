@@ -1,24 +1,7 @@
 <div>
-
-    <flux:heading class="text-center mb-3" size="xl">Welcome back</flux:heading>
-
-    <div class="space-y-4">
-        <flux:button class="w-full">
-            <x-slot name="icon">
-                <flux:icon.google/>
-            </x-slot>
-            {{ __('messages.continue_with_google') }}
-        </flux:button>
-
-        <flux:button class="w-full">
-            <x-slot name="icon">
-                <flux:icon.github/>
-            </x-slot>
-            {{ __('messages.continue_with_github') }}
-        </flux:button>
+    <div class="flex justify-center">
+       <img src="{{ Vite::asset('resources/img/logo3.svg') }}" class="w-32 h-auto" alt="logo">
     </div>
-
-    <flux:separator class="my-5" text="or"/>
 
     <div class="flex flex-col gap-6">
         <form wire:submit="login" class="space-y-4">
@@ -45,7 +28,7 @@
                 <flux:input type="password" wire:model="password"/>
             </flux:field>
 
-            <flux:checkbox label="{{ __('messages.remember_me_for_30_days') }}"/>
+            <flux:checkbox label="{{ __('messages.remember_me') }}"/>
 
             <flux:button type="submit" variant="primary" class="w-full">{{ __('messages.login') }}</flux:button>
         </form>
