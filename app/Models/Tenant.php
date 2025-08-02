@@ -1,0 +1,43 @@
+<?php
+
+namespace App\Models;
+
+use App\Enums\Status;
+use App\Traits\Models\HasSearch;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+class Tenant extends Model
+{
+    /** @use HasFactory<\Database\Factories\TenantFactory> */
+    use HasFactory;
+
+    use HasSearch;
+
+    protected $fillable = [
+        'social_reason',
+        'fantasy_name',
+        'identification_number',
+        'subdomain',
+        'logo',
+        'zipcode',
+        'street',
+        'city',
+        'state',
+        'number',
+        'complement',
+        'cellphone',
+        'email',
+        'status',
+    ];
+
+    protected $casts = [
+        'status' => Status::class,
+    ];
+
+    public function user(): HasMany
+    {
+        return $this->hasMany(User::class);
+    }
+}

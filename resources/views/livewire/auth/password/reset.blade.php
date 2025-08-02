@@ -1,25 +1,30 @@
-{{--<x-card title="Reset Password">--}}
+<div>
+    <div class="text-center mb-10">
+        <flux:heading size="xl" class="text-3xl font-extrabold" accent>
+            {{ __('messages.reset_password') }}
+        </flux:heading>
+    </div>
 
-{{--    @if($message = session()->get('status'))--}}
-{{--    <x-alert icon="o-exclamation-triangle" class="alert-error my-2">--}}
-{{--        {{ $message }}--}}
-{{--    </x-alert>--}}
-{{--    @endif--}}
-{{--    <x-form class="space-y-6" wire:submit="changePassword" no-separator>--}}
-{{--        <x-input type="email" label="Email" value="{{ $this->obfuscatedEmail }}" readonly />--}}
-{{--        <x-input type="email" label="Email Confirmation" wire:model="email_confirmation" />--}}
-{{--        <x-input type="password" label="Password" wire:model="password"/>--}}
-{{--        <x-input type="password" label="Password Confirmation" wire:model="password_confirmation"/>--}}
-{{--        <x-slot:actions>--}}
-{{--            <x-button label="Reset" class="btn-primary w-full" type="submit" spinner="changePassword"/>--}}
-{{--        </x-slot:actions>--}}
-{{--    </x-form>--}}
+    <form wire:submit="changePassword" class="space-y-4">
+        @csrf
 
-{{--   <p class="mt-10 text-center text-sm text-gray-400">--}}
-{{--        go back to login--}}
-{{--        <a wire:navigate href="{{ route('login') }}"--}}
-{{--           class="font-semibold leading-6 text-indigo-400 hover:text-indigo-300">--}}
-{{--            Login--}}
-{{--        </a>--}}
-{{--    </p>--}}
-{{--</x-card>--}}
+        <flux:field>
+            <flux:label>{{ __('messages.password') }}</flux:label>
+            <flux:input type="password" wire:model="password" viewable/>
+            <flux:error name="password"/>
+        </flux:field>
+        <flux:field>
+            <flux:label>{{ __('messages.confirm_password') }}</flux:label>
+            <flux:input type="password" wire:model="password_confirmation" viewable/>
+            <flux:error name="password_confirmation"/>
+        </flux:field>
+
+        <flux:button type="submit" variant="primary"
+                     class="w-full mt-10 uppercase cursor-pointer">{{ __('messages.reset') }}</flux:button>
+    </form>
+
+    <flux:subheading class="text-center mt-5">
+        {{ __('messages.back_to') }}
+        <flux:link variant="subtle" href="{{ route('login') }}">{{ __('messages.login') }}</flux:link>
+    </flux:subheading>
+</div>

@@ -12,16 +12,6 @@ use Livewire\Component;
  */
 class BranchEnv extends Component
 {
-    public function render(): string
-    {
-        return <<<'blade'
-        <div class="flex items-center space-x-2">
-            <span>{{ $this->branch }} </span>
-            <span>{{ $this->env }}</span>
-        </div>
-        blade;
-    }
-
     #[Computed]
     public function env(): string
     {
@@ -34,5 +24,15 @@ class BranchEnv extends Component
         $process = Process::run('git branch --show-current');
 
         return trim($process->output());
+    }
+
+    public function render(): string
+    {
+        return <<<'blade'
+        <div class="flex items-center space-x-2">
+            <span>{{ $this->branch }} </span>
+            <span>{{ $this->env }}</span>
+        </div>
+        blade;
     }
 }

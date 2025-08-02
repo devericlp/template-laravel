@@ -13,6 +13,6 @@ class PermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        Permission::create(['key' => Can::BE_AN_ADMIN]);
+//        Permission::create(['key' => Can::BE_AN_ADMIN]);
     }
 }

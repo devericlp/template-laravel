@@ -19,7 +19,7 @@ class CodeValidation implements ValidationRule
         $user = auth()->user();
 
         if ($value != $user->validation_code) {
-            $fail('Invalid code');
+            $fail(__('messages.invalid_code'));
         }
     }
 }

@@ -33,7 +33,7 @@ class Impersonate extends Component
         $this->validate();
         session()->put('impersonate', $this->user->id);
         session()->put('impersonator', auth()->user()->id);
-        $this->redirect(route('dashboard'));
+        $this->redirect(route('home'));
     }
 
     #[On('user::impersonation')]

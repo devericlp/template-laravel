@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Middleware\HandleImpersonation;
+use App\Http\Middleware\{CheckTenantSubdomain, HandleImpersonation, MainDomainAccess, SetLocale};
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\{Exceptions, Middleware};
 
@@ -10,8 +10,17 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__ . '/../routes/console.php',
         health: '/up',
     )
-    ->withMiddleware(function (Middleware $middleware) {
+    ->withMiddleware(callback: function (Middleware $middleware) {
         $middleware->appendToGroup('web', HandleImpersonation::class);
+
+        $middleware->append([
+            SetLocale::class,
+        ]);
+
+        $middleware->alias([
+            'main_domain'            => MainDomainAccess::class,
+            'check_tenant_subdomain' => CheckTenantSubdomain::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

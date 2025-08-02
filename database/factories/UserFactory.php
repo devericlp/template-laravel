@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Enums\Can;
+use App\Enums\Status;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -32,6 +33,8 @@ class UserFactory extends Factory
             'password'          => static::$password ??= Hash::make('password'),
             'remember_token'    => Str::random(10),
             'created_at'        => fake()->dateTime(),
+            'level' => 0,
+            'status' => Status::random()
         ];
     }
 
@@ -62,7 +65,10 @@ class UserFactory extends Factory
 
     public function admin(): static
     {
-        return $this->afterCreating(fn (User $user) => $user->givePermissionTo(Can::BE_AN_ADMIN));
+        return $this->state(fn () => [
+            'tenant_id' => null,
+            'level' => 1,
+        ]);
     }
 
     public function deleted($deleted_by = null): static

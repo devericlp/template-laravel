@@ -2,15 +2,17 @@
 
 namespace App\Livewire\Auth;
 
-use Flux\Flux;
+use App\Traits\Livewire\HasToast;
 use Illuminate\Support\Facades\{Auth, RateLimiter};
 use Illuminate\Support\Str;
 use Illuminate\View\View;
-use Livewire\Attributes\{Layout, Validate};
+use Livewire\Attributes\{Layout, On, Validate};
 use Livewire\Component;
 
 class Login extends Component
 {
+    use HasToast;
+
     #[Validate(['required', 'email', 'max:255'])]
     public ?string $email = null;
 
@@ -27,22 +29,17 @@ class Login extends Component
             return;
         }
 
-        if (! Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
+        if (!Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
 
             RateLimiter::hit($this->throttleKey());
 
             $this->addError('invalidCredentials', __('auth.failed'));
-
-            Flux::toast(
-                text: __('auth.failed'),
-                heading: __('messages.warning'),
-                variant: 'warning'
-            );
+            $this->warning(__('auth.failed'));
 
             return;
         }
 
-        $this->redirect(route('dashboard'));
+        $this->redirect(route('home'));
     }
 
     private function throttleKey(): string
@@ -59,12 +56,7 @@ class Login extends Component
             ]);
 
             $this->addError('rateLimiter', $error_message);
-
-            Flux::toast(
-                text: __('auth.failed'),
-                heading: $error_message,
-                variant: 'warning'
-            );
+            $this->warning($error_message);
 
             return true;
         }
@@ -72,10 +64,23 @@ class Login extends Component
         return false;
     }
 
+    #[On('show-toast')]
+    public function showToast(string $type, string $message): void
+    {
+        $this->$type($message);
+    }
+
+    public function mount(): void
+    {
+        if (session()->has('toast')) {
+            $this->dispatch('show-toast', type: session('toast')['type'], message: session('toast')['message']);
+        }
+    }
+
     #[Layout('components.layouts.guest')]
     public function render(): View
     {
         return view('livewire.auth.login')
-            ->title('Sign in to your account');
+            ->title(__('messages.sign_in'));
     }
 }

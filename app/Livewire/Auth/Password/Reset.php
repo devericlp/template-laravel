@@ -3,48 +3,37 @@
 namespace App\Livewire\Auth\Password;
 
 use App\Models\User;
+use App\Traits\Livewire\HasToast;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\{DB, Hash, Password};
 use Illuminate\Support\Str;
 use Illuminate\View\View;
-use Livewire\Attributes\{Computed, Rule};
+use Livewire\Attributes\{Validate};
 use Livewire\Component;
 
 class Reset extends Component
 {
-    #[Rule(['required'])]
+    use HasToast;
+
+    #[Validate(['required'])]
     public ?string $token = null;
 
-    #[Rule(['required', 'email', 'confirmed'])]
+    #[Validate(['required'])]
     public ?string $email = null;
 
-    #[Rule(['required', 'email'])]
-    public ?string $email_confirmation = null;
-
-    #[Rule(['required', 'confirmed'])]
+    #[Validate(['required', 'confirmed'])]
     public ?string $password = null;
 
     public ?string $password_confirmation = null;
 
-    public function mount(?string $token = null, ?string $email = null): void
-    {
-        $this->token = request('token', $token);
-        $this->email = request('email', $email);
-
-        if ($this->tokenIsNotValid()) {
-            session()->flash("status", "Token invalid");
-            $this->redirectRoute('login');
-        }
-    }
-
-    public function changePassword()
+    public function changePassword(): void
     {
         $this->validate();
 
         $status = Password::reset(
             $this->only('email', 'password', 'password_confirmation', 'token'),
             function (User $user, $password) {
-                $user->password       = $password;
+                $user->password = $password;
                 $user->remember_token = Str::random(60);
                 $user->save();
 
@@ -52,20 +41,16 @@ class Reset extends Component
             }
         );
 
-        session()->flash('status', __($status));
 
         if ($status !== Password::PASSWORD_RESET) {
             return;
         }
 
+        session()->flash('toast', [
+            'type' => 'success',
+            'message' => __('messages.password_updated_successfully')
+        ]);
         $this->redirectRoute('login');
-    }
-
-    public function render(): view
-    {
-        return view('livewire.auth.password.reset')
-            ->title('Reset Password')
-            ->layout('components.layouts.guest');
     }
 
     private function tokenIsNotValid(): bool
@@ -81,9 +66,24 @@ class Reset extends Component
         return true;
     }
 
-    #[Computed]
-    public function obfuscatedEmail(): string
+    public function mount(?string $token = null, ?string $email = null): void
     {
-        return obfuscate_email($this->email);
+        $this->token = request('token', $token);
+        $this->email = request('email', $email);
+
+        if ($this->tokenIsNotValid()) {
+            session()->flash('toast', [
+                'type' => 'danger',
+                'message' => __('messages.invalid_password_reset_link')
+            ]);
+            $this->redirectRoute('login');
+        }
+    }
+
+    public function render(): view
+    {
+        return view('livewire.auth.password.reset')
+            ->title('Reset Password')
+            ->layout('components.layouts.guest');
     }
 }

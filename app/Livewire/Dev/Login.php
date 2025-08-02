@@ -20,7 +20,7 @@ class Login extends Component
     public function login(): void
     {
         auth()->loginUsingId($this->selectedUser);
-        $this->redirect(route('dashboard'));
+        $this->redirect(route('home'));
     }
 
     #[Computed]

@@ -1,20 +1,28 @@
-{{--<x-card title="Password Recovery">--}}
-{{--    @if($message)--}}
-{{--        <x-alert icon="o-check-circle" class="alert-success my-2 text-white">--}}
-{{--            {{ $message }}--}}
-{{--        </x-alert>--}}
-{{--    @endif--}}
-{{--    <x-form class="space-y-6" wire:submit="recoveryPassword" no-separator>--}}
-{{--        <x-input type="email" label="Email" wire:model="email"/>--}}
-{{--        <x-slot:actions>--}}
-{{--            <x-button label="Recovery" class="btn-primary w-full" type="submit" spinner="recoveryPassword"/>--}}
-{{--        </x-slot:actions>--}}
-{{--    </x-form>--}}
-{{--    <p class="mt-10 text-center text-sm text-gray-400">--}}
-{{--        <a wire:navigate href="{{ route('login') }}"--}}
-{{--           class="font-semibold leading-6 text-indigo-400 hover:text-indigo-300">--}}
-{{--            Back to Login--}}
-{{--        </a>--}}
-{{--    </p>--}}
-{{--</x-card>--}}
+<div class="py-24">
+
+    <div class="text-center mb-10">
+        <flux:heading size="xl" class="text-3xl font-extrabold" accent>
+            {{ __('messages.forgot_password') }}
+        </flux:heading>
+        <flux:subheading>{{ __('messages.password_recovery_instruction') }}</flux:subheading>
+    </div>
+
+    <form wire:submit="submit" class="space-y-4">
+        @csrf
+
+        <flux:field>
+            <flux:label>{{ __('messages.email') }}</flux:label>
+            <flux:input type="email" icon="envelope" wire:model="email" placeholder="{{ __('messages.email') }}"/>
+            <flux:error name="email"/>
+        </flux:field>
+
+        <flux:button type="submit" variant="primary"
+                     class="w-full uppercase cursor-pointer">{{ __('messages.recover_password') }}</flux:button>
+    </form>
+
+    <flux:subheading class="text-center mt-5">
+        {{ __('messages.back_to') }}
+        <flux:link variant="subtle" href="{{ route('login') }}">{{ __('messages.login') }}</flux:link>
+    </flux:subheading>
+</div>
 

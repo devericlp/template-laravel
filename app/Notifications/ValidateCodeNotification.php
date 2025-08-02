@@ -36,8 +36,7 @@ class ValidateCodeNotification extends Notification
     {
         return (new MailMessage())
                     ->line('Your verification code is: ')
-                    ->line($notifiable->validation_code)
-                    ->action('Notification Action', url('/'));
+                    ->line($notifiable->validation_code);
     }
 
     /**

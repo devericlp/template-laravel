@@ -6,21 +6,21 @@ use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Event;
 use Illuminate\View\View;
-use Livewire\Attributes\Rule;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 class Register extends Component
 {
-    #[Rule('required')]
+    #[Validate(['required', 'min:3', 'max:255'])]
     public ?string $name = null;
 
-    #[Rule(['required', 'email', 'unique:App\Models\User,email'])]
+    #[Validate(['required', 'email', 'lowercase', 'unique:App\Models\User,email', 'max:255'])]
     public ?string $email = null;
 
-    #[Rule(['required', 'min:6', 'max:8', 'confirmed'])]
+    #[Validate(['required', 'min:8', 'confirmed'])]
     public ?string $password = null;
 
-    #[Rule('required')]
+    #[Validate(['required'])]
     public ?string $password_confirmation = null;
 
     public function submit(): void
@@ -37,7 +37,7 @@ class Register extends Component
 
         Event::dispatch(new Registered($user));
 
-        $this->redirect(route('email-validation'));
+        $this->redirect(route('email-validation') . '?welcome=1');
     }
 
     public function render(): View
