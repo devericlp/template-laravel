@@ -28,4 +28,13 @@ enum Status: int
             self::PENDING => 'yellow',
         };
     }
+
+    public static function fromName(string $name): int
+    {
+        foreach (self::cases() as $case) {
+            if ($case->name === strtoupper($name)) {
+                return $case->value;
+            }
+        }
+    }
 }

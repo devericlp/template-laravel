@@ -6,7 +6,7 @@
     <flux:sidebar.toggle class="lg:hidden" icon="x-mark"/>
     <flux:brand href="{{ route('home') }}" name="{{ config('app.name') }}">
         <x-slot name="logo" class="size-6 rounded-full bg-accent text-white text-xs font-bold">
-            <flux:icon name="code-bracket" variant="micro" />
+            <flux:icon name="code-bracket" variant="micro"/>
         </x-slot>
     </flux:brand>
 
@@ -14,12 +14,30 @@
         <flux:navlist.item icon="home" href="{{ route('home') }}"
                            :current="Route::currentRouteName() === 'home'">{{ __('messages.home') }}</flux:navlist.item>
 
-        <flux:navlist.item icon="building-office-2" href="{{ route('tenants.index') }}"
-                           :current="Route::currentRouteName() === 'tenants.index'">{{ __('messages.tenants') }}</flux:navlist.item>
+        <flux:navlist.group expandable heading="{{ __('messages.tenants') }}">
+            <flux:navlist.item
+                icon="list-bullet"
+                href="{{ route('tenants.index') }}"
+                :current="Route::currentRouteName() === 'tenants.index'"
+            >
+                {{ __('messages.list') }}
+            </flux:navlist.item>
+            <flux:navlist.item
+                icon="plus"
+                href="{{ route('tenants.create') }}"
+                :current="Route::currentRouteName() === 'tenants.create'"
+            >
+                {{ __('messages.create') }}
+            </flux:navlist.item>
+        </flux:navlist.group>
+
+        <flux:navlist.item icon="" href=""
+        ></flux:navlist.item>
     </flux:navlist>
     <flux:spacer/>
     <flux:navlist variant="outline">
-        <flux:navlist.item icon="cog-6-tooth" href="{{ route('settings') }}" :current="Route::currentRouteName() === 'settings'">
+        <flux:navlist.item icon="cog-6-tooth" href="{{ route('settings') }}"
+                           :current="Route::currentRouteName() === 'settings'">
             {{ __('messages.settings') }}
         </flux:navlist.item>
 

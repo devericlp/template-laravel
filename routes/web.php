@@ -53,6 +53,7 @@ Route::middleware(['main_domain'])->group(function () {
 
     Route::prefix('tenants')->group(function () {
         Route::get('/', Tenants\Index::class)->name('tenants.index');
+        Route::get('/create', Tenants\Create::class)->name('tenants.create');
         Route::get('{tenant}', Tenants\Show::class)->name('tenants.show');
     });
 
