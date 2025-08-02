@@ -58,6 +58,24 @@
             "@php artisan key:generate --ansi",
             "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
             "@php artisan migrate --graceful --ansi"
+        ],
+        "reset-dev": [
+            "php artisan migrate:fresh",
+            "php artisan db:seed",
+            "php artisan optimize:clear",
+            "php artisan optimize"
+        ],
+        "pull": [
+            "rm -rf composer.lock",
+            "composer install",
+            "composer update",
+            "npm install",
+            "npm update",
+            "php artisan migrate",
+            "php artisan tenant:migrate",
+            "php artisan storage:link",
+            "php artisan optimize:clear",
+            "php artisan optimize"
         ]
     },
     "extra": {
