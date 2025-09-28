@@ -27,7 +27,7 @@
                 href="{{ route('tenants.create') }}"
                 :current="Route::currentRouteName() === 'tenants.create'"
             >
-                {{ __('messages.create') }}
+                {{ __('messages.new') }}
             </flux:navlist.item>
         </flux:navlist.group>
 

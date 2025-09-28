@@ -1,4 +1,7 @@
 import './bootstrap';
+import { only_digits } from "./functions.js";
+
+window.only_digits = only_digits;
 
 document.addEventListener('alpine:init', () => {
     Alpine.data('timer', (minutes, storageKey = 'resend_timer_start') => ({

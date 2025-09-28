@@ -19,19 +19,20 @@ class TenantFactory extends Factory
     {
         return [
             'social_reason'         => $this->faker->company,
-            'fantasy_name'          => $this->faker->companySuffix,
             'identification_number' => $this->faker->unique()->regexify('[0-9]{14}'),
             'subdomain'             => $this->faker->unique()->domainWord,
             'logo'                  => $this->faker->imageUrl(200, 200, 'business', true, 'logo'),
             'zipcode'               => $this->faker->postcode,
-            'street'                => $this->faker->streetName,
+            'street'                => $this->faker->address,
+            'neighborhood'          => $this->faker->streetName,
             'city'                  => $this->faker->city,
-            'state'                 => $this->faker->stateAbbr,
-            'number'                => $this->faker->buildingNumber,
-            'complement'            => $this->faker->secondaryAddress,
+            'state'                 => $this->faker->stateAbbr, // @phpstan-ignore-line
+            'country'               => $this->faker->country,
+            'number'                => fake()->randomElement([$this->faker->buildingNumber, null]),
+            'complement'            => fake()->randomElement([$this->faker->sentence(3), null]),
             'cellphone'             => $this->faker->phoneNumber,
             'email'                 => $this->faker->unique()->safeEmail,
-            'status'             => Status::random()
+            'status'                => Status::random(),
         ];
     }
 }

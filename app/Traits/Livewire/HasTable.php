@@ -2,8 +2,9 @@
 
 namespace App\Traits\Livewire;
 
+use App\Support\Table\Header;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Attributes\Computed;
 
 trait HasTable
@@ -17,34 +18,42 @@ trait HasTable
     public int $perPage = 5;
 
     public array $pageLengths = [
-        5, 10, 25, 50
+        5, 10, 25, 50,
     ];
 
-    abstract public function query(): Builder;
+    abstract public function tableQuery(): Builder;
 
-    abstract public function searchColumns(): array;
-
+    /**
+     * @return Header[]
+     */
     abstract public function tableHeaders(): array;
-
-    public function sort($column): void
-    {
-        if ($this->sortBy === $column) {
-            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
-        } else {
-            $this->sortBy        = $column;
-            $this->sortDirection = 'asc';
-        }
-    }
 
     #[Computed]
     public function items(): LengthAwarePaginator
     {
-        $query = $this->query();
+        $headers = collect($this->tableHeaders());
+        $query   = $this->tableQuery();
 
-        $query->search($this->search, $this->searchColumns());
+        $searchableColumns = $headers->where('searchable', true)->pluck('key')->toArray();
+        $query->search($this->search, $searchableColumns);
 
-        return $query
-            ->orderBy($this->sortBy, $this->sortDirection)
-            ->paginate($this->perPage);
+        $sortColumn = $headers->firstWhere('key', $this->sortBy);
+
+        if (! is_null($sortColumn->sort)) {
+            $paginated = $query->paginate($this->perPage);
+            $query     = sort_paginated_collection($paginated, $sortColumn->sort, $this->sortDirection);
+        } else {
+            $query = $query
+                ->orderBy($this->sortBy, $this->sortDirection)
+                ->paginate($this->perPage);
+        }
+
+        return $query;
+    }
+
+    #[Computed]
+    public function headers(): array
+    {
+        return $this->tableHeaders();
     }
 }

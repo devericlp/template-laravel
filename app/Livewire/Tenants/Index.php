@@ -4,43 +4,45 @@ namespace App\Livewire\Tenants;
 
 use App\Enums\Status;
 use App\Models\Tenant;
-use App\Traits\Livewire\HasTable;
+use App\Support\Table\Header;
+use App\Traits\Livewire\TableManager;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\View\View;
-use Livewire\{Component, WithPagination};
+use Livewire\{Attributes\Computed, Component, WithPagination};
 
 class Index extends Component
 {
-    use HasTable;
+
     use WithPagination;
+    use TableManager;
 
     public string $status_filter = 'all';
 
-    public function query(): Builder
+    #[Computed()]
+    public function tableQuery(): Builder
     {
-        return Tenant::query()
-            ->when($this->status_filter !== 'all', fn(Builder $q) => $q->where('status', Status::fromName($this->status_filter)));
+         return Tenant::query()
+            ->when($this->status_filter !== 'all', fn (Builder $q) => $q->where('status', Status::fromName($this->status_filter)));
     }
 
-    public function searchColumns(): array
-    {
-        return [
-            'social_reason',
-            'fantasy_name',
-            'identification_number',
-            'subdomain',
-        ];
-    }
-
+    #[Computed()]
     public function tableHeaders(): array
     {
-        // TODO: Implement tableHeaders() method.
+        return [
+            Header::make('id', 'ID', true, true),
+            Header::make('social_reason', 'Razão Social', true, true),
+            Header::make('identification_number', 'CNPJ', true, true),
+            Header::make('subdomain', 'Subdomínio', true, true),
+            Header::make('status', 'Status', true, true),
+            Header::make('created_at', 'Criado em', true, true),
+            Header::make('actions', 'Ações', false, false),
+        ];
     }
 
     public function render(): View
     {
         return view('livewire.tenants.index', [
-            'statuses' => Status::cases()
+            'statuses' => Status::cases(),
         ]);
     }
 }

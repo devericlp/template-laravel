@@ -26,7 +26,6 @@
     {{ $slot }}
 </flux:main>
 
-
 <livewire:auth.logout/>
 @fluxScripts
 

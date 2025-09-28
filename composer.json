@@ -66,13 +66,11 @@
             "php artisan optimize"
         ],
         "pull": [
-            "rm -rf composer.lock",
             "composer install",
             "composer update",
             "npm install",
             "npm update",
             "php artisan migrate",
-            "php artisan tenant:migrate",
             "php artisan storage:link",
             "php artisan optimize:clear",
             "php artisan optimize"

@@ -15,15 +15,16 @@ return new class extends Migration
         Schema::create('tenants', function (Blueprint $table) {
             $table->id();
             $table->string('social_reason');
-            $table->string('fantasy_name');
             $table->string('identification_number')->unique();
             $table->string('subdomain')->unique();
             $table->string('logo')->nullable();
 
             $table->string('zipcode')->nullable();
-            $table->string('street')->nullable();
-            $table->string('city')->nullable();
-            $table->string('state')->nullable();
+            $table->string('street');
+            $table->string('neighborhood');
+            $table->string('city');
+            $table->string('state');
+            $table->string('country');
             $table->integer('number')->nullable();
             $table->text('complement')->nullable();
 
