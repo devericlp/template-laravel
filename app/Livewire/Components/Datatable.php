@@ -21,7 +21,7 @@ class Datatable extends Component
 
     public array $pageLengths = [5, 10, 25, 50];
 
-    public mixed $query;
+    public $query;
 
     public $headers;
 
@@ -35,7 +35,7 @@ class Datatable extends Component
         }
     }
 
-    public function mount($query, array $headers = []): void
+    public function mount($query = null, array $headers = []): void
     {
         $this->query = $query;
         $this->headers = $headers;
@@ -47,14 +47,13 @@ class Datatable extends Component
         return <<<'blade'
 
             @php
-                 $items = $this->getItems();
+                 $items = $this->items;
             @endphp
 
             <div>
                 <flux:table :paginate="$items">
                     <flux:table.columns>
                         @foreach ($headers as $header)
-
                             <flux:table.column
                              :sortable="$header->sortable"
                                 :sorted="$sortBy === $header->key"
@@ -88,7 +87,7 @@ class Datatable extends Component
                         @else
                             <flux:table.row>
                                 <flux:table.cell colspan="{{ count($headers) }}" align="center">
-                                    Nenhum registro encontrado
+                                    {{ __('messages.no_records_found') }}
                                 </flux:table.cell>
                             </flux:table.row>
                         @endif

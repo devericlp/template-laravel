@@ -9,17 +9,10 @@ use Livewire\Attributes\Computed;
 
 trait TableManager
 {
-
-    public string $search = '';
-    public ?string $sortBy = null;
-    public string $sortDirection = 'asc';
-    public int $perPage = 10;
-    public array $pageLengths = [10, 25, 50, 100];
-
     #[Computed]
     public function items(): LengthAwarePaginator
     {
-        $query = $this->tableQuery();
+        $query = $this->query;
 
         // Aplica pesquisa
         $this->applySearch($query);
@@ -43,7 +36,7 @@ trait TableManager
     public function headers(): array
     {
 
-        return $this->tableHeaders();
+        return $this->headers;
     }
 
     public function updatingSearch()
@@ -92,7 +85,7 @@ trait TableManager
                 // Relacionamento simples relation.column
                 if (strpos($header->key, '.') !== false) {
                     [$relation, $column] = explode('.', $header->key, 2);
-                    $q->orWhereHas($relation, fn($r) => $r->where($column, 'like', "%{$this->search}%"));
+                    $q->orWhereHas($relation, fn ($r) => $r->where($column, 'like', "%{$this->search}%"));
                 } else {
                     $q->orWhere($header->key, 'like', "%{$this->search}%");
                 }
