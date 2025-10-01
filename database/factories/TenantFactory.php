@@ -18,20 +18,20 @@ class TenantFactory extends Factory
     public function definition(): array
     {
         return [
-            'social_reason'         => $this->faker->company,
-            'identification_number' => $this->faker->unique()->regexify('[0-9]{14}'),
-            'subdomain'             => $this->faker->unique()->domainWord,
-            'logo'                  => $this->faker->imageUrl(200, 200, 'business', true, 'logo'),
-            'zipcode'               => $this->faker->postcode,
-            'street'                => $this->faker->address,
-            'neighborhood'          => $this->faker->streetName,
-            'city'                  => $this->faker->city,
-            'state'                 => $this->faker->stateAbbr, // @phpstan-ignore-line
-            'country'               => $this->faker->country,
-            'number'                => fake()->randomElement([$this->faker->buildingNumber, null]),
-            'complement'            => fake()->randomElement([$this->faker->sentence(3), null]),
-            'cellphone'             => $this->faker->phoneNumber,
-            'email'                 => $this->faker->unique()->safeEmail,
+            'social_reason'         => fake()->company,
+            'identification_number' => fake()->unique()->regexify('[0-9]{14}'),
+            'subdomain'             => fake()->unique()->domainWord . fake()->numberBetween(1, 9999),
+            'logo'                  => fake()->imageUrl(200, 200, 'business', true, 'logo'),
+            'zipcode'               => fake()->postcode,
+            'street'                => fake()->address,
+            'neighborhood'          => fake()->streetName,
+            'city'                  => fake()->city,
+            'state'                 => fake()->stateAbbr, // @phpstan-ignore-line
+            'country'               => fake()->country,
+            'number'                => fake()->randomElement([fake()->buildingNumber, null]),
+            'complement'            => fake()->randomElement([fake()->sentence(3), null]),
+            'cellphone'             => fake()->phoneNumber,
+            'email'                 => fake()->unique()->safeEmail,
             'status'                => Status::random(),
         ];
     }
