@@ -8,7 +8,7 @@ use App\Support\Table\Header;
 use App\Traits\Livewire\HasTable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\View\View;
-use Livewire\{Attributes\Computed, Component, WithPagination};
+use Livewire\{Attributes\Computed, Attributes\Url, Component, WithPagination};
 
 class Index extends Component
 {
@@ -16,17 +16,32 @@ class Index extends Component
 
     use WithPagination;
 
+    #[Url]
     public string $search = '';
+
+    public array $pageLengths = [5, 10, 25, 50];
 
     public array $filters = [];
 
-    public bool $showAdvancedFilters = false;
-
+    #[Url]
     public string $sortBy = 'id';
+
+    #[Url]
+    public int $perPage = 10;
 
     public string $sortDirection = 'asc';
 
     public string $recordVisibility = RecordVisibility::WithoutDeleted->value;
+
+    public function sort($column)
+    {
+        if ($this->sortBy === $column) {
+            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortBy = $column;
+            $this->sortDirection = 'asc';
+        }
+    }
 
     #[Computed()]
     public function items()
@@ -35,7 +50,8 @@ class Index extends Component
 
         return Tenant::query()
             ->when($this->search, fn (Builder $q) => $q->whereAny($searchableColumns, 'like', "%{$this->search}%"))
-            ->paginate(10);
+            ->orderBy($this->sortBy, $this->sortDirection)
+            ->paginate($this->perPage);
     }
 
     #[Computed]
