@@ -18,7 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->alias([
-            'main_domain'            => MainDomainAccess::class,
+            'main_domain' => MainDomainAccess::class,
             'check_tenant_subdomain' => CheckTenantSubdomain::class,
         ]);
     })

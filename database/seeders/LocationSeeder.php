@@ -14,6 +14,10 @@ class LocationSeeder extends Seeder
     public function run(): void
     {
 
+        if (app()->environment('testing')) {
+            return;
+        }
+
         DB::transaction(function () {
 
             $this->generateCountries();

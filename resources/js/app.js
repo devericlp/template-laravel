@@ -7,6 +7,7 @@ document.addEventListener('alpine:init', () => {
     Alpine.data('timer', (minutes, storageKey = 'resend_timer_start') => ({
         totalSeconds: minutes * 60,
         init() {
+
             this.restoreFromStorage();
             if (this.totalSeconds > 0) {
                 this.startCountdown();

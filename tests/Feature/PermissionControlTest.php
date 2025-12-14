@@ -23,7 +23,7 @@ it('should be able to give an user a permission to do something', function () {
     ]);
 
     assertDatabaseHas('permission_user', [
-        'user_id'       => $user->id,
+        'user_id' => $user->id,
         'permission_id' => Permission::where('key', '=', Can::BE_AN_ADMIN->value)->first()->id,
     ]);
 
@@ -46,7 +46,7 @@ test('seed with an admin user', function () {
     ]);
 
     assertDatabaseHas('permission_user', [
-        'user_id'       => User::first()?->id,
+        'user_id' => User::first()?->id,
         'permission_id' => Permission::where('key', '=', Can::BE_AN_ADMIN->value)->first()?->id,
     ]);
 });

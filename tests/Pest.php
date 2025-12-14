@@ -11,10 +11,20 @@
 |
 */
 
-uses(
-    Tests\TestCase::class,
-    Illuminate\Foundation\Testing\RefreshDatabase::class,
-)->in('Feature');
+use Illuminate\Support\Facades\Artisan;
+
+pest()->extend(Tests\TestCase::class)
+    ->beforeEach(function () {
+        Artisan::call('db:seed', [
+            '--class' => 'RoleSeeder',
+            '--force' => true,
+        ]);
+        Artisan::call('db:seed', [
+            '--class' => 'PermissionSeeder',
+            '--force' => true,
+        ]);
+    })->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
+    ->in('Feature', 'Unit');
 
 /*
 |--------------------------------------------------------------------------

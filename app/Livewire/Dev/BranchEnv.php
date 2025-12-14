@@ -30,8 +30,8 @@ class BranchEnv extends Component
     {
         return <<<'blade'
         <div class="flex items-center space-x-2">
-            <span>{{ $this->branch }} </span>
-            <span>{{ $this->env }}</span>
+            <flux:badge color="lime">{{ $this->branch }}</flux:badge>
+            <flux:badge>{{ $this->env }}</flux:badge>
         </div>
         blade;
     }

@@ -15,18 +15,18 @@
 
 <body class="min-h-screen bg-white dark:bg-zinc-800">
 
-@if (session('impersonate'))
-    <livewire:admin.users.stop-impersonate/>
+@if (auth()->user() && session('impersonate'))
+    <livewire:components.users.user-stop-impersonate/>
 @endif
 
 @include('parts.sidebar')
 @include('parts.header')
 
-<flux:main class="lg:!p-4 !p-4">
+<flux:main container>
     {{ $slot }}
 </flux:main>
 
-<livewire:auth.logout/>
+<livewire:components.auth.logout/>
 @fluxScripts
 
 @persist('toast')

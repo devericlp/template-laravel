@@ -7,7 +7,7 @@
 ])
 
 <div
-    class="flex md:flex-row justify-between items-center sm:items-end"
+    class="flex md:flex-row justify-between items-center sm:items-end mb-5"
     x-data="{ isMobile: window.innerWidth < 640 }"
     x-init="window.addEventListener('resize', () => isMobile = window.innerWidth < 640)"
     x-cloak

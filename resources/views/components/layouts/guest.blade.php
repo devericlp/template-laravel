@@ -14,6 +14,8 @@
 
 <body class="min-h-screen flex flex-col items-center justify-start md:justify-center">
 
+<livewire:dev.login/>
+
 <div class="rounded-xl shadow-2xl flex flex-col md:flex-row w-full max-w-5xl sm:border sm:border-accent/25">
     <div
         class="relative md:w-1/3 hidden bg-accent p-6 md:flex flex-col justify-center items-center space-y-3 md:rounded-l-xl"
@@ -62,7 +64,7 @@
     </div>
 </div>
 
-<livewire:auth.logout/>
+<livewire:components.auth.logout/>
 @fluxScripts
 
 @persist('toast')

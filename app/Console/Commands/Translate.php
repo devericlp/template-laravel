@@ -32,12 +32,12 @@ class Translate extends Command
         $translations = [];
 
         $lang_codes = [
-            'en'    => 'en',
+            'en' => 'en',
             'pt_BR' => 'pt',
         ];
 
         $lang_names = [
-            'en'    => 'English',
+            'en' => 'English',
             'pt_BR' => 'Portuguese',
         ];
 
@@ -60,7 +60,7 @@ class Translate extends Command
                 // Show suggestion and ask for confirmation
                 $this->line("\nSuggested {$lang_names[$lang]} translation: {$suggested}");
 
-                if (! $this->confirm('Is this translation correct?', true)) {
+                if (!$this->confirm('Is this translation correct?', true)) {
                     // If not correct, ask for manual input
                     $translations[$word][$lang] = $this->ask(
                         "Please enter the correct {$lang_names[$lang]} translation"
@@ -88,10 +88,10 @@ class Translate extends Command
         try {
             $response = Http::get($url, [
                 'client' => 'gtx',
-                'dt'     => 't',
-                'q'      => str_replace('_', ' ', $word),
-                'sl'     => $source_lang,
-                'tl'     => $target_lang,
+                'dt' => 't',
+                'q' => str_replace('_', ' ', $word),
+                'sl' => $source_lang,
+                'tl' => $target_lang,
             ]);
 
             if ($response->successful()) {
@@ -108,11 +108,11 @@ class Translate extends Command
 
     private function updateTranslationFile($lang, $translations)
     {
-        $file      = $this->argument('file');
+        $file = $this->argument('file');
         $file_path = base_path("resources/lang/{$lang}/{$file}.php");
 
         // Create directory if it doesn't exist
-        if (! File::exists(dirname($file_path))) {
+        if (!File::exists(dirname($file_path))) {
             File::makeDirectory(dirname($file_path), 0755, true);
         }
 

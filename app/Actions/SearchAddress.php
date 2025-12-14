@@ -27,20 +27,20 @@ class SearchAddress
 
     public function handle(string $zipcode): false|array
     {
-        $res  = Http::get($this->url . '/ws/' . $zipcode . '/json/');
+        $res = Http::get($this->url . '/ws/' . $zipcode . '/json/');
         $data = $res->object();
 
-        if ($res->failed() || isset($data->erro) || ! $data) {
+        if ($res->failed() || isset($data->erro) || !$data) {
             return false;
         }
 
-        $address                 = [];
-        $address['street']       = $data->logradouro;
+        $address = [];
+        $address['street'] = $data->logradouro;
         $address['neighborhood'] = $data->bairro;
-        $address['state']        = $data->uf;
-        $address['city']         = $data->localidade;
-        $address['complement']   = $data->complemento;
-        $address['country']      = 'Brasil';
+        $address['state'] = $data->uf;
+        $address['city'] = $data->localidade;
+        $address['complement'] = $data->complemento;
+        $address['country'] = 'Brasil';
 
         return $address;
     }

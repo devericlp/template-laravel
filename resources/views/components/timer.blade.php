@@ -1,6 +1,4 @@
-@props([
-    'minutes'
-])
+@props(['minutes'])
 
 
 <div x-data="timer(@js($minutes))" x-init="init()" @resend-start="restart()">
@@ -11,12 +9,8 @@
     </template>
 
     <template x-if="totalSeconds === 0">
-        <flux:text
-            size="sm"
-            class="cursor-pointer hover:text-accent"
-            wire:click="sendNewCode"
-            @click="$dispatch('resend-start')"
-        >
+        <flux:text size="sm" class="cursor-pointer hover:text-accent" wire:click="sendNewCode"
+            @click="$dispatch('resend-start')">
             {{ __('messages.send_new_code') }}
         </flux:text>
     </template>

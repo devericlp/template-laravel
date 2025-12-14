@@ -22,12 +22,5 @@
         @endforeach
     </div>
 
-    {{--CALENDAR--}}
-    <div class="flex mt-5">
-        <flux:card class="col-span-1">
-            <flux:calendar/>
-        </flux:card>
-    </div>
-
 
 </div>

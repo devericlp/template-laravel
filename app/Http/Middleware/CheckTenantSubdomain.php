@@ -25,7 +25,7 @@ class CheckTenantSubdomain
                 return Tenant::query()->where('subdomain', $subdomain)->first();
             });
 
-            if (! $tenant) {
+            if (!$tenant) {
                 throw new NotFoundHttpException;
             }
 

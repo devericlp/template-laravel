@@ -16,7 +16,7 @@ class MainDomainAccess
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (! is_null(get_subdomain($request->getHost()))) {
+        if (!is_null(get_subdomain($request->getHost()))) {
             throw new NotFoundHttpException;
         }
 

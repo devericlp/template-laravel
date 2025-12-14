@@ -1,10 +1,11 @@
 <?php
 
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Str;
 
 function obfuscate_email(?string $email = null): string
 {
-    if (! $email) {
+    if (!$email) {
         return '';
     }
 
@@ -14,14 +15,14 @@ function obfuscate_email(?string $email = null): string
         return '';
     }
 
-    $firstPart       = $split[0];
-    $qty             = (int) floor(strlen($firstPart) * 0.75);
-    $remaining       = strlen($firstPart) - $qty;
+    $firstPart = $split[0];
+    $qty = (int) floor(strlen($firstPart) * 0.75);
+    $remaining = strlen($firstPart) - $qty;
     $maskedFirstPart = substr($firstPart, 0, $remaining) . str_repeat('*', $qty);
 
-    $secondPart       = $split[1];
-    $qty              = (int) floor(strlen($secondPart) * 0.75);
-    $remaining        = strlen($secondPart) - $qty;
+    $secondPart = $split[1];
+    $qty = (int) floor(strlen($secondPart) * 0.75);
+    $remaining = strlen($secondPart) - $qty;
     $maskedSecondPart = str_repeat('*', $qty) . substr($secondPart, $remaining * -1, $remaining);
 
     return $maskedFirstPart . '@' . $maskedSecondPart;
@@ -46,8 +47,8 @@ function get_subdomain(?string $host = null): ?string
  */
 function get_subdomain_route(string $route, string $subdomain): string
 {
-    $parts_route          = parse_url($route);
-    $subdomain            = ! str_ends_with($subdomain, '.') ? $subdomain . '.' : $subdomain;
+    $parts_route = parse_url($route);
+    $subdomain = !str_ends_with($subdomain, '.') ? $subdomain . '.' : $subdomain;
     $route_with_subdomain = $parts_route['scheme'] . '://' . $subdomain . $parts_route['host'] . (isset($parts_route['port']) ? ':' . $parts_route['port'] : '') . $parts_route['path'];
 
     return $route_with_subdomain;
@@ -80,8 +81,29 @@ function sort_paginated_collection(LengthAwarePaginator $paginated_data, callabl
         $paginated_data->perPage(),
         $paginated_data->currentPage(),
         [
-            'path'  => LengthAwarePaginator::resolveCurrentPath(),
+            'path' => LengthAwarePaginator::resolveCurrentPath(),
             'query' => request()->query(),
         ]
     );
+}
+
+/**
+ * Check if a group is expanded in the settings page
+ * @param string $groupName
+ * @return bool
+ */
+function checkGroupExpanded(string $groupName): bool
+{
+    return Str::startsWith(request()->path(), $groupName);
+}
+
+/**
+ * Get the format date based on locale
+ * @param ?string $locale
+ * @return string
+ */
+function get_format_date(?string $locale = null): string
+{
+    $locale = $locale ?? config('app.locale');
+    return $locale === 'en' ? 'm/d/Y' : 'd/m/Y';
 }

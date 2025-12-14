@@ -4,14 +4,22 @@ namespace App\Enums;
 
 enum Status: int
 {
-    case INACTIVE = 0;
-    case ACTIVE = 1;
-    case BLOCKED = 2;
-    case PENDING = 3;
-
     public function label(): string
     {
-        return __("messages." . strtolower($this->name));
+        return __('messages.' . strtolower($this->name));
+    }
+
+    public static function options(): array
+    {
+        $options = [];
+
+        foreach (self::cases() as $case) {
+            $options[] = [
+                'id' => $case->value,
+                'name' => $case->label()
+            ];
+        }
+        return $options;
     }
 
     public static function random(): self
@@ -37,4 +45,8 @@ enum Status: int
             }
         }
     }
+    case INACTIVE = 1;
+    case ACTIVE = 2;
+    case BLOCKED = 3;
+    case PENDING = 4;
 }

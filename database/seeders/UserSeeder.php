@@ -15,8 +15,9 @@ class UserSeeder extends Seeder
         User::factory()
             ->admin()
             ->create([
-                'name'  => 'Admin',
+                'name' => 'Admin',
                 'email' => 'admin@admin.com',
+                'tenant_id' => null,
             ]);
 
         User::factory(20)->create();

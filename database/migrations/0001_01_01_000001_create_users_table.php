@@ -1,8 +1,7 @@
 <?php
 
 use App\Enums\Status;
-use App\Models\Tenant;
-use App\Models\User;
+use App\Models\{Tenant, User};
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -20,6 +19,7 @@ return new class () extends Migration {
             $table->timestamp('email_verified_at')->nullable();
             $table->integer('validation_code')->nullable();
             $table->string('password');
+            $table->string('avatar')->nullable();
             $table->rememberToken();
             $table->tinyInteger('status')->default(Status::ACTIVE->value);
             $table->timestamps();
@@ -28,7 +28,6 @@ return new class () extends Migration {
             $table->dateTime('restored_at')->nullable();
             $table->foreignIdFor(User::class, 'restored_by')->nullable();
             $table->foreignIdFor(Tenant::class)->nullable();
-            $table->integer('level')->default(0);
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
