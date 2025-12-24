@@ -25,6 +25,8 @@ trait HasTable
     public string $sortDirection = 'asc';
 
     public $selected = [];
+    
+    public int $currentPage = 1;
 
     #[Url]
     public int $perPage = 10;
@@ -232,5 +234,11 @@ trait HasTable
     public function filter(string $id): void
     {
         $this->modal($id)->close();
+    }
+
+
+    public function updatingPage($page)
+    {
+        $this->currentPage = $page;
     }
 }

@@ -1,19 +1,47 @@
-<div x-data="{
+<div wire:key="datatable-page-{{ $items->currentPage() }}" x-data="{
     id: @js($id),
     selectable: @js($selectable),
     selected: @entangle('selected'),
     pageIds: {{ json_encode($getAllIds()) }},
+    currentPage: @entangle('currentPage'),
+    search: @entangle('search'),
+    filters: @entangle('filters'),
+    init() {
+        this.$watch('search', value => {
+            this.selected = [];
+        });
+        this.$watch('filters', value => {
+            this.selected = [];
+        });
+    },
     openModal: function() {
         $flux.modal(this.id).show();
     },
     filter: function() {
         $wire.filter(this.id);
     },
+    toggleAll(checked) {
+        if (this.hasAllPageItemsChecked()) {
+            this.removeIds();
+        } else {
+            this.pushIds();
+        }
+    },
+    hasAllPageItemsChecked() {
+        if (!this.pageIds.length) return false;
+        const pageIds = this.pageIds.map(String);
+        return pageIds.every(id => this.selected.includes(id));
+    },
     pushIds() {
-        this.selected.push(...this.pageIds.filter(i => !this.selected.includes(i)))
+        const idsToAdd = this.pageIds
+            .map(String)
+            .filter(i => !this.selected.includes(i));
+        this.selected.push(...idsToAdd);
     },
     removeIds() {
-        this.selected = this.selected.filter(i => !this.pageIds.includes(i))
+        this.selected = this.selected.filter(
+            i => !this.pageIds.map(String).includes(i)
+        );
     },
 }">
     <flux:card class="mt-5 px-4">
@@ -97,7 +125,7 @@
 
                     <template x-if="selectable">
                         <flux:table.column align="center">
-                            <flux:checkbox.all wire:model="selectAll" />
+                            <flux:checkbox.all x-bind:checked="hasAllPageItemsChecked" @click.prevent="toggleAll()" />
                         </flux:table.column>
                     </template>
 

@@ -37,7 +37,6 @@ class Datatable extends Component
     ) {
         $this->search = $search;
         $this->id = md5(uniqid((string)time(), true));
-        $ids = $this->getAllIds();
     }
 
     public function hasLink(mixed $header): bool
