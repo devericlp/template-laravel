@@ -17,6 +17,7 @@ use App\Livewire\{Dashboard,
     Pages\Users\UserShow,
     Pages\Users\UserUpdate
 };
+use App\Livewire\Pages\Roles\RoleIndex;
 use App\Livewire\Pages\Settings\SettingsIndex;
 use Illuminate\Support\Facades\Route;
 
@@ -63,6 +64,10 @@ Route::middleware(['auth', ShouldBeVerified::class, 'check_tenant_subdomain', 'w
         Route::get('{user}/show', UserShow::class)->name('users.show');
         Route::get('{user}', UserUpdate::class)->name('users.update');
     });
+
+    Route::prefix('roles')->group(function () {
+        Route::get('/', RoleIndex::class)->name('roles.index');
+    });
 });
 
 /*
@@ -80,7 +85,7 @@ Route::middleware(['auth', 'main_domain', 'web'])->group(function () {
         Route::get('/', TenantIndex::class)->name('tenants.index');
         Route::get('/create', TenantCreate::class)->name('tenants.create');
         Route::get('{tenant}/show', TenantShow::class)->name('tenants.show');
-        Route::get('{tenant}', TenantUpdate::class)->name('tenants.update');
+        // Route::get('{tenant}', TenantUpdate::class)->name('tenants.update');
     });
 
 });

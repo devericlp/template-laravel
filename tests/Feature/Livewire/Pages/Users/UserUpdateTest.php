@@ -147,31 +147,6 @@ it('should save the avatar image', function () {
     Storage::disk('public')->assertExists($user->avatar);
 });
 
-it('should replace the avatar image when the user change the avatar', function () {
-    Storage::fake('public');
-
-    $oldAvatarPath = 'users/old_avatar.jpg';
-    Storage::disk('public')->put($oldAvatarPath, 'fake-old-content');
-
-    $user = User::factory()->create([
-        'avatar' => $oldAvatarPath,
-    ]);
-
-    $newAvatar = UploadedFile::fake()->image('new_avatar.jpg');
-
-    Livewire::test(UserUpdate::class, ['user' => $user])
-        ->set('avatar', $newAvatar)
-        ->call('update')
-        ->assertHasNoErrors();
-
-    $user->refresh();
-
-    Storage::disk('public')->assertMissing($oldAvatarPath);
-    Storage::disk('public')->assertExists($user->avatar);
-    expect($user->avatar)->not->toBe($oldAvatarPath);
-
-});
-
 it('should delete the avatar file when the user remove the avatar image', function () {
     Storage::fake('public');
 

@@ -48,7 +48,7 @@ class UserUpdate extends Component
             ],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
             'role_id' => ['required'],
-            'tenant_id' => ['nullable'],
+            'tenant_id' => ['required'],
             'avatar' => ['nullable', 'image', 'max:10240'],
         ];
     }
