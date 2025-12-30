@@ -70,8 +70,8 @@ it('should load a confirmation modal before impersonation', function () {
     Livewire::test(UserImpersonate::class)
         ->call('confirmImpersonate', $userToImpersonate->id)
         ->assertSet('modalId', 'confirm-impersonate-user-modal')
-        ->assertSet('titleConfirmation', __('messages.are_you_sure_you_want_to_impersonate_the_user', ['user' => $userToImpersonate->name]))
-        ->assertSet('messageConfirmation', null)
+        ->assertSet('titleConfirmation', __('messages.impersonate_user'))
+        ->assertSet('messageConfirmation', __('messages.are_you_sure_you_want_to_impersonate_the_user', ['user' => $userToImpersonate->name]))
         ->assertSet('callbackConfirmation', 'impersonateUser')
         ->assertSet('cancelTextConfirmation', null)
         ->assertSet('confirmTextConfirmation', null);
