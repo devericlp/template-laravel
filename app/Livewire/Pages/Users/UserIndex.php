@@ -3,7 +3,7 @@
 namespace App\Livewire\Pages\Users;
 
 use App\Enums\{FilterType, RecordVisibility, Roles, Status};
-use App\Models\{Role, Tenant, User};
+use App\Models\{Role, User};
 use App\Support\Table\{Filter, Header};
 use App\Traits\Livewire\HasTable;
 use Carbon\Carbon;
@@ -18,8 +18,6 @@ class UserIndex extends Component
 
     public array $statuses = [];
 
-    public array $tenants = [];
-
     public array $visibilities = [];
 
     public array $roles = [];
@@ -29,7 +27,6 @@ class UserIndex extends Component
         return [
             Header::make('name', __('messages.user'), true, true),
             Header::make('email', __('messages.email'), true, true),
-            Header::make('tenant_social_reason', __('messages.tenant'), false, false),
             Header::make('role_name', __('messages.role'), false, false),
             Header::make('created_at', __('messages.created_at'), true, true),
             Header::make('status', __('messages.status')),
@@ -40,12 +37,7 @@ class UserIndex extends Component
     protected function tableQuery(): Builder
     {
         return User::query()
-            ->with(['tenant', 'roles'])
-            ->addSelect([
-                'tenant_social_reason' => Tenant::select('social_reason')
-                    ->whereColumn('id', 'tenant_id')
-                    ->limit(1)
-            ])
+            ->with(['roles'])
             ->addSelect([
                 'role_name' => Role::select('name')
                     ->join('model_has_roles', 'roles.id', '=', 'model_has_roles.role_id')
@@ -61,7 +53,6 @@ class UserIndex extends Component
                 $this->filters['role_id'],
                 fn (Builder $q) => $q->whereHas('roles', fn ($query) => $query->where('roles.id', $this->filters['role_id']))
             )
-            ->when($this->filters['tenant_id'], fn (Builder $q) => $q->where('tenant_id', '=', $this->filters['tenant_id']))
             ->when($this->filters['status'], fn (Builder $q) => $q->where('status', '=', $this->filters['status']))
             ->when($this->filters['start_date'], fn (Builder $q) => $q->where('created_at', '>=', Carbon::parse($this->filters['start_date'])->startOfDay()))
             ->when($this->filters['end_date'], fn (Builder $q) => $q->where('created_at', '<=', Carbon::parse($this->filters['end_date'])->endOfDay()));
@@ -107,14 +98,6 @@ class UserIndex extends Component
                     return Carbon::parse($value)->format('d/m/Y');
                 }
             ),
-            Filter::make(
-                key: 'tenant_id',
-                type: FilterType::SELECT,
-                label: 'tenant',
-                resolver: function ($value) {
-                    return collect($this->tenants)->firstWhere('id', $value)['social_reason'];
-                }
-            ),
         ];
     }
 
@@ -123,7 +106,6 @@ class UserIndex extends Component
         $this->statuses = collect(Status::options())->wherein('id', [Status::ACTIVE->value, Status::INACTIVE->value])->toArray();
         $this->visibilities = RecordVisibility::options();
         $this->roles = Roles::options();
-        $this->tenants = Tenant::query()->orderBy('social_reason')->get()->toArray();
     }
 
     #[On('bulk-action::completed')]

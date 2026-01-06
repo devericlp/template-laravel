@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Notifications\UserDeletedNotification;
 use App\Traits\Livewire\{HasConfirmation, HasToast};
 use Closure;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -53,7 +54,7 @@ class UserDelete extends Component
             ->whereNull('deleted_at')
             ->update([
                 'deleted_at' => now(),
-                'deleted_by' => auth()->user()->id,
+                'deleted_by' => Auth::user()->id,
                 'restored_at' => null,
                 'restored_by' => null,
             ]);
@@ -66,7 +67,7 @@ class UserDelete extends Component
     public function deleteUser(): void
     {
         $this->user->delete();
-        $this->user->deleted_by = auth()->user()->id;
+        $this->user->deleted_by = Auth::user()->id;
         $this->user->restored_at = null;
         $this->user->restored_by = null;
         $this->user->save();

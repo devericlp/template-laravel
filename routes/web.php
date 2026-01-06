@@ -8,18 +8,15 @@ use App\Livewire\{Dashboard,
     Pages\Auth\Password\Recovery,
     Pages\Auth\Password\Reset,
     Pages\Auth\Register,
-    Pages\Tenants\TenantCreate,
-    Pages\Tenants\TenantIndex,
-    Pages\Tenants\TenantShow,
-    Pages\Tenants\TenantUpdate,
     Pages\Users\UserCreate,
     Pages\Users\UserIndex,
     Pages\Users\UserShow,
     Pages\Users\UserUpdate
 };
-use App\Livewire\Pages\Roles\RoleIndex;
+use App\Livewire\Pages\Permissions\PermissionIndex;
+use App\Livewire\Pages\Roles\{RoleIndex, RoleShow};
 use App\Livewire\Pages\Settings\SettingsIndex;
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\{Auth, Route};
 
 /*
 |--------------------------------------------------------------------------
@@ -29,12 +26,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['check_tenant_subdomain'])->group(function () {
+Route::middleware(['guest'])->group(function () {
     Route::redirect('/', '/login');
     Route::get('/login', Login::class)->name('login')->middleware('guest');
     Route::get('/register', Register::class)->name('register')->middleware('guest');
     Route::get('/email-validation', EmailValidation::class)->name('email-validation')->middleware('auth');
-    Route::get('/logout', fn () => auth()->logout())->name('logout');
+    Route::get('/logout', fn () => Auth::logout())->name('logout');
     Route::get('/password/recovery', Recovery::class)->name('password.recovery');
     Route::get('/password/reset', Reset::class)->name('password.reset');
 });
@@ -47,7 +44,7 @@ Route::middleware(['check_tenant_subdomain'])->group(function () {
 |
 */
 
-Route::middleware(['auth', ShouldBeVerified::class, 'check_tenant_subdomain', 'web'])->group(function () {
+Route::middleware(['auth', ShouldBeVerified::class, 'web'])->group(function () {
 
     Route::get('/home', Home::class)->name('home');
 
@@ -67,25 +64,10 @@ Route::middleware(['auth', ShouldBeVerified::class, 'check_tenant_subdomain', 'w
 
     Route::prefix('roles')->group(function () {
         Route::get('/', RoleIndex::class)->name('roles.index');
-    });
-});
-
-/*
-|--------------------------------------------------------------------------
-| Admin routes
-|--------------------------------------------------------------------------
-|
-| Routes accessed only in the main domain with a master user
-|
-*/
-
-Route::middleware(['auth', 'main_domain', 'web'])->group(function () {
-
-    Route::prefix('tenants')->group(function () {
-        Route::get('/', TenantIndex::class)->name('tenants.index');
-        Route::get('/create', TenantCreate::class)->name('tenants.create');
-        Route::get('{tenant}/show', TenantShow::class)->name('tenants.show');
-        // Route::get('{tenant}', TenantUpdate::class)->name('tenants.update');
+        Route::get('/{role}', RoleShow::class)->name('roles.show');
     });
 
+    Route::prefix('permissions')->group(function () {
+        Route::get('/', PermissionIndex::class)->name('permissions.index');
+    });
 });

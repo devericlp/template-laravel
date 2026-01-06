@@ -49,14 +49,6 @@
             <flux:date-picker wire:model="filters.start_date" label="{{ __('messages.start_date') }}"
                 selectable-header />
             <flux:date-picker wire:model="filters.end_date" label="{{ __('messages.end_date') }}" selectable-header />
-
-            <flux:select wire:model="filters.tenant_id" label="{{ __('messages.tenant') }}"
-                placeholder="{{ __('messages.all') }}" variant="listbox" searchable clearable>
-                @foreach ($tenants as $tenant)
-                    <flux:select.option value="{{ $tenant['id'] }}">{{ $tenant['social_reason'] }}
-                    </flux:select.option>
-                @endforeach
-            </flux:select>
         </x-slot>
 
         @scope('cell_name', $user)
@@ -65,10 +57,6 @@
                     :src="$user->avatar ? asset('storage/' . $user->avatar) : null" />
                 <span>{{ $user->name }}</span>
             </div>
-        @endscope
-
-        @scope('cell_tenant_social_reason', $user)
-            {{ $user->tenant_social_reason ?? '-' }}
         @endscope
 
         @scope('cell_status', $user)

@@ -4,7 +4,6 @@ namespace App\Livewire\Pages\Users;
 
 use App\Actions\Users\CreateUser;
 use App\Enums\Roles;
-use App\Models\{Tenant};
 use App\Traits\Livewire\HasToast;
 use Illuminate\View\View;
 use Livewire\Attributes\Validate;
@@ -30,21 +29,16 @@ class UserCreate extends Component
     #[Validate(['required'])]
     public ?int $role_id = null;
 
-    #[Validate(['required'])]
-    public ?int $tenant_id = null;
-
     #[Validate(['nullable', 'image', 'max:10240'])]
     public $avatar;
 
     public array $roles = [];
 
-    public array $tenants = [];
-
     public function store(): void
     {
         $this->validate();
 
-        (new CreateUser())->handle($this->only('name', 'email', 'password', 'tenant_id', 'role_id', 'avatar'));
+        (new CreateUser())->handle($this->only('name', 'email', 'password', 'role_id', 'avatar'));
 
         $this->success(__('messages.user_created_successfully'));
 
@@ -60,7 +54,6 @@ class UserCreate extends Component
     public function mount(): void
     {
         $this->roles = Roles::options();
-        $this->tenants = Tenant::all()->toArray();
     }
 
     public function render(): View

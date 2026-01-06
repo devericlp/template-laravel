@@ -10,19 +10,21 @@
     <form wire:submit="handle" class="space-y-4">
         @csrf
 
-        <flux:field>
-            <flux:label>{{ __('messages.code') }}</flux:label>
-            <flux:input wire:model="code"
-                        placeholder="{{ __('messages.code') }}"/>
-            <flux:error name="code"/>
-        </flux:field>
+        <div class="max-w-64 mx-auto">
+            <flux:field>
+                <flux:otp wire:model="code" length="6" />
+                <flux:error name="code" />
+            </flux:field>
+        </div>
 
-        <flux:button type="submit" variant="primary"
-                     class="w-full uppercase cursor-pointer">{{ __('messages.verify') }}</flux:button>
+
+        <flux:button type="submit" variant="primary" class="w-full uppercase cursor-pointer">
+            {{ __('messages.verify') }}
+        </flux:button>
     </form>
 
     <div class="text-center mt-10">
-       <x-timer minutes="3" />
+        <x-timer minutes="3" />
 
         <flux:subheading class="text-center mt-5 cursor-pointer hover:text-accent">
             <p @click="$dispatch('logout')">{{ __('messages.logout') }}</p>

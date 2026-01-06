@@ -27,12 +27,13 @@ use Spatie\Permission\Traits\HasRoles;
  * @property Carbon|null $restored_at
  * @property int|null $restored_by
  * @property Status $status
- * @property int|null $tenant_id
  * @property string|null $avatar
  */
 class User extends Authenticatable implements Auditable
 {
+    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory;
+
     use HasRoles;
     use HasSearch;
     use Notifiable;
@@ -53,7 +54,6 @@ class User extends Authenticatable implements Auditable
         'restored_at',
         'restored_by',
         'status',
-        'tenant_id',
         'avatar',
         'email_verified_at',
     ];
@@ -108,10 +108,5 @@ class User extends Authenticatable implements Auditable
     public function restoredBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'restored_by', 'id');
-    }
-
-    public function tenant(): BelongsTo
-    {
-        return $this->belongsTo(Tenant::class, 'tenant_id', 'id');
     }
 }

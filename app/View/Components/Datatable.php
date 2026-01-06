@@ -30,6 +30,7 @@ class Datatable extends Component
         public ?string              $link = null,
         public ?bool                $noHover = false,
         public ?bool                $selectable = false,
+        public ?bool                $flat = false,
         public ?array               $rowDecoration = [],
         // slots
         public mixed                $fields = null,

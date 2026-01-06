@@ -54,10 +54,6 @@
                         <flux:text>{{ $user->email }}</flux:text>
                     </div>
                     <div class="space-y-2">
-                        <flux:heading>{{ __('messages.tenant') }}</flux:heading>
-                        <flux:text>{{ $user->tenant_id ? $user->tenant->social_reason : '-' }}</flux:text>
-                    </div>
-                    <div class="space-y-2">
                         <flux:heading>{{ __('messages.created_at') }}</flux:heading>
                         <flux:text>{{ $user->created_at->format(get_format_date()) }}</flux:text>
                     </div>

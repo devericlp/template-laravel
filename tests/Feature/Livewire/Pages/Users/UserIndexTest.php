@@ -1,6 +1,8 @@
 <?php
 
 use App\Livewire\Pages\Users\UserIndex;
+use App\Models\User;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Livewire\Livewire;
 
 it('renders successfully', function () {
@@ -8,10 +10,21 @@ it('renders successfully', function () {
         ->assertStatus(200);
 });
 
-test('check if all actions components  is in the page', function () {
-    Livewire::test(UserIndex::class)
-        ->assertContainsLivewireComponent('components.users.user-create')
-        ->assertContainsLivewireComponent('components.users.user-update')
-        ->assertContainsLivewireComponent('components.users.user-restore')
-        ->assertContainsLivewireComponent('components.users.user-impersonate');
+it('should load all users', function () {
+    User::factory()->count(10)->create();
+
+    $lw = Livewire::test(UserIndex::class)
+        ->set('perPage', 10)
+        ->assertSet('items', function ($items) {
+            expect($items)
+                ->toBeInstanceOf(LengthAwarePaginator::class)
+                ->toHaveCount(10);
+
+            return true;
+        });
+
+});
+
+it('should filter the users by keyword', function () {
+    //expect()->
 });

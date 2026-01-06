@@ -44,7 +44,7 @@
         );
     },
 }">
-    <flux:card class="mt-5 px-4">
+    <flux:card class="mt-5 px-4 {{ $flat ? 'border-0 bg-transparent' : '' }}">
         <div class="flex flex-col md:flex-row justify-between items-center mb-1 pb-2">
             {{-- PAGE LENGTH AND SEARCH BAR --}}
             <div class="flex flex-col items-center md:flex-row gap-2">

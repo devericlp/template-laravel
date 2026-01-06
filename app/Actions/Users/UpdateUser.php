@@ -22,10 +22,6 @@ class UpdateUser
             'role_id' => $data['role_id'],
         ];
 
-        if (!is_null($data['tenant_id'])) {
-            $updateData['tenant_id'] = $data['tenant_id'];
-        }
-
         if (!is_null($data['password'])) {
             $updateData['password'] = $data['password'];
         }

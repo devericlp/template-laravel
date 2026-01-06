@@ -2,7 +2,7 @@
 
 use App\Enums\Roles;
 use App\Livewire\Pages\Users\UserUpdate;
-use App\Models\{Tenant, User};
+use App\Models\{User};
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\{Hash, Storage};
 use Livewire\Livewire;
@@ -11,7 +11,6 @@ use function Pest\Laravel\{actingAs};
 
 beforeEach(function () {
     actingAs(User::factory()->admin()->create());
-    $this->tenant = Tenant::factory()->create();
 });
 
 it('renders successfully', function () {
@@ -21,7 +20,6 @@ it('renders successfully', function () {
 });
 
 it('should be able to update an user', function ($role_id) {
-    $tenant = Tenant::factory()->create();
     $user = User::factory()->create();
 
     $oldPassword = $user->password;
@@ -31,7 +29,6 @@ it('should be able to update an user', function ($role_id) {
         ->set('email', 'john@doe.com')
         ->set('password', 'password123')
         ->set('password_confirmation', 'password123')
-        ->set('tenant_id', $tenant->id)
         ->set('role_id', $role_id)
         ->call('update')
         ->assertHasNoErrors();
@@ -132,7 +129,7 @@ test('required fields', function ($field) {
         ->set($field, '')
         ->call('update')
         ->assertHasErrors([$field => 'required']);
-})->with(['name', 'email', 'role_id', 'tenant_id']);
+})->with(['name', 'email', 'role_id']);
 
 it('should save the avatar image', function () {
     $user = User::factory()->create();

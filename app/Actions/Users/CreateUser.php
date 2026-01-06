@@ -18,7 +18,6 @@ class CreateUser
         $user->name = $data['name'];
         $user->email = $data['email'];
         $user->password = $data['password'];
-        $user->tenant_id = $data['tenant_id'];
         $user->email_verified_at = now();
 
         if ($data['avatar']) {

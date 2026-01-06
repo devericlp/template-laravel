@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Enums\{Roles, Status};
-use App\Models\{Tenant, User};
+use App\Models\{User};
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -33,7 +33,6 @@ class UserFactory extends Factory
             'remember_token' => Str::random(10),
             'created_at' => fake()->dateTime(),
             'status' => fake()->randomElement([Status::ACTIVE->value, Status::INACTIVE->value]),
-            'tenant_id' => Tenant::factory(),
         ];
     }
 
