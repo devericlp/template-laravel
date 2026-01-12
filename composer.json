@@ -1,7 +1,7 @@
 {
-    "name": "laravel/laravel",
+    "name": "devericlp/tallstack-starter-kit",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "Starter kit for TALL Stack applications with Livewire Flux integration.",
     "keywords": [
         "laravel",
         "framework"
